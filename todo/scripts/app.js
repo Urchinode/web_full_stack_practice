@@ -21,17 +21,51 @@ const DOM = {
     }
 }
 
+class TodoItem{
+    constructor(title, completed = false){
+        this.title = title;
+        this.isCompleted = completed;
+    }
+
+    complete(){
+        this.isCompleted = true;
+    }
+
+    toJSON(){
+        return {
+            title: this.title, 
+            isCompleted: this.isCompleted
+        }
+    }
+
+    static fromJSON(json){
+        return new TodoItem(json.title, json.isCompleted);
+    }
+}
+
 // Store in local storage
 function storeTodo(title){
+    const newTodoItem = new TodoItem(title);
     const todos = JSON.parse(localStorage.getItem('todos')) || [];
-    todos.push(title);
+    todos.push(newTodoItem);
     localStorage.setItem('todos', JSON.stringify(todos));
 }
 
 // Remove local storage
 function removeTodo(index){
+    console.log(index);
     const todos = JSON.parse(localStorage.getItem('todos')) || [];
     todos.splice(index, 1);
+    localStorage.setItem('todos', JSON.stringify(todos));
+}
+
+// Save todo list state
+function completeTodo(index){
+    const todos = JSON.parse(localStorage.getItem('todos')) || [];
+    const todo = TodoItem.fromJSON(todos[index]);
+    todo.complete();
+    // 완료된 todo가 저장되도록 로컬 스토리지에 저장
+    todos[index] = todo;
     localStorage.setItem('todos', JSON.stringify(todos));
 }
 
@@ -40,12 +74,12 @@ function removeTodo(index){
 function loadTodo(){
     const todos = JSON.parse(localStorage.getItem('todos')) || [];
     for (const todo of todos){
-        renderTodo(todo);
+        renderTodo(todo.title, todo.isCompleted);
     }
 }
 
 // Render new todo card
-function renderTodo(title){
+function renderTodo(title, isCompleted){
     // Init todo card
     const todoList = document.getElementById(DOM.ID_NAME.TODO_LIST);
     const newTodo = document.createElement(DOM.ELEMENT.LIST);
@@ -57,11 +91,17 @@ function renderTodo(title){
     const todoTitle = document.createElement(DOM.ELEMENT.SPAN);
     todoTitle.className = DOM.CLASS_NAME.TODO_TITLE_TEXT;
     todoTitle.textContent = title;
+    if(isCompleted){
+        todoTitle.style.textDecoration = 'line-through';
+    }
 
     // Complete button
     const completeBtn = document.createElement(DOM.ELEMENT.BUTTON);
     completeBtn.className = DOM.CLASS_NAME.COMPLETE_BTN;
     completeBtn.textContent = '완료';
+    if(isCompleted){
+        completeBtn.style.textDecoration = 'line-through';
+    }
 
     // Delete button
     const deleteBtn = document.createElement(DOM.ELEMENT.BUTTON);
@@ -116,9 +156,12 @@ function activateCompleteEvent(){
     const todoList = document.getElementById(DOM.ID_NAME.TODO_LIST);
     todoList.addEventListener('click', (event) => {
         if(event.target.classList.contains(DOM.CLASS_NAME.COMPLETE_BTN)){
-            const button = event.target.closest(`.${DOM.CLASS_NAME.COMPLETE_BTN}`);
+            const todoListItem = event.target.closest(DOM.ELEMENT.LIST);
+            const index = Array.from(todoList.children).indexOf(todoListItem);
+            completeTodo(index);
+            const button = todoListItem.querySelector(`.${DOM.CLASS_NAME.COMPLETE_BTN}`);
             button.style.textDecoration = 'line-through';
-            const todoCard = event.target.closest(`#${DOM.ID_NAME.TOOD_CARD}`);
+            const todoCard = todoListItem.querySelector(`#${DOM.ID_NAME.TOOD_CARD}`);
             const todoTitle = todoCard.querySelector(`.${DOM.CLASS_NAME.TODO_TITLE_TEXT}`);
             todoTitle.style.textDecoration = 'line-through';
         }
