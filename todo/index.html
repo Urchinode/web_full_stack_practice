@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang=en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles/styles.css">
+    <link rel="stylesheet" href="styles/todo.css">
+    <link rel="stylesheet" href="styles/colors.css">
+    <script src="scripts/app.js" defer></script>
+    <title>Todo List</title>
+</head>
+<body>
+    <header>
+        <h1>Todo</h1>
+    </header>
+    <main>
+        <section id="todo-create-section">
+            <h2>Create your todo</h2>
+            <form id="todo-form">
+                <input type="text" id="todo-input" placeholder="Input todo title">
+                <button type="submit" class="register-btn">Add</button>
+            </form>
+        </section>
+        <section id="todo-list-section">
+            <h2>List</h2>
+            <ol id="todo-list">
+                <!-- 아래 li 태그를 DOM 조작으로 생성 및 삭제 -->
+                <li>
+                    <div id="todo-card">
+                        <span class="todo-title-text">Todo item 1</span>
+                        <button class="complete-btn">완료</button>
+                        <button class="delete-btn">삭제</button>
+                    </div>
+                </li>
+                <li>
+                    <div id="todo-card">
+                        <span class="todo-title-text">Todo item 1</span>
+                        <button class="complete-btn">완료</button>
+                        <button class="delete-btn">삭제</button>
+                    </div>
+                </li>
+            </ol>  
+        </section>  
+</section>
+    </main>
+</body>
+</html>

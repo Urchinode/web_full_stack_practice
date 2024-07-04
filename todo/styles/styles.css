@@ -1,0 +1,21 @@
+/* HTML tag style */
+html{
+    background-color: #202225;
+    color: white;
+    font: sans-serif;
+}
+
+header{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+button{
+    width: 4rem;
+    height: 2rem;
+    padding: 0.5rem;
+    border-radius: 10px;
+    border: none;
+    color: white;
+}

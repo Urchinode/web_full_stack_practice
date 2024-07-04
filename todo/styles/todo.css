@@ -1,0 +1,52 @@
+/* Styles for Todo components */
+
+#todo-create-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+#todo-list-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+/* Todo form to create */
+#todo-form{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    background-color: #7289da;
+    width: 80%;
+    padding: 15px 0;
+    border-radius: 25px;
+}
+
+/* Todo title input */
+#todo-input{
+    width: 60%;
+    height: 2rem;
+    font-size: 1rem;
+    border-radius: 20px;
+    border-width: 0px;
+    background-color: white;
+}
+
+#todo-list{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    background-color: #7289da;
+    width: 80%;
+    padding: 15px 0;
+    border-radius: 25px;
+}
+
+.todo-title-text{
+    font-size: 2rem;
+}
