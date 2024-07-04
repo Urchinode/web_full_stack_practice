@@ -22,6 +22,10 @@ const DOM = {
 }
 
 function addTodo(title){
+    if(!title || title.trim().length === 0){
+        alert('Please input any text.');
+        return;
+    }
     // Init todo card
     const todoList = document.getElementById(DOM.ID_NAME.TODO_LIST);
     const newTodo = document.createElement(DOM.ELEMENT.LIST);
@@ -63,4 +67,38 @@ function activateRegisterEvent(){
     });
 }
 
-activateRegisterEvent();
+// Event handler for Delete Button
+function activateDeleteEvent(){
+    const todoList = document.getElementById(DOM.ID_NAME.TODO_LIST);
+    todoList.addEventListener('click', (event) => {
+        // Find Todo Card index
+        if(event.target.classList.contains(DOM.CLASS_NAME.DELETE_BTN)){
+            const todoListItem = event.target.closest(DOM.ELEMENT.LIST);
+            todoListItem.remove();
+        }
+    }
+)
+}
+
+// Event handler for Complete Button
+function activateCompleteEvent(){
+    const todoList = document.getElementById(DOM.ID_NAME.TODO_LIST);
+    todoList.addEventListener('click', (event) => {
+        if(event.target.classList.contains(DOM.CLASS_NAME.COMPLETE_BTN)){
+            const button = event.target.closest(`.${DOM.CLASS_NAME.COMPLETE_BTN}`);
+            button.style.textDecoration = 'line-through';
+            const todoCard = event.target.closest(`#${DOM.ID_NAME.TOOD_CARD}`);
+            const todoTitle = todoCard.querySelector(`.${DOM.CLASS_NAME.TODO_TITLE_TEXT}`);
+            todoTitle.style.textDecoration = 'line-through';
+        }
+    });
+
+}
+
+function init(){
+    activateRegisterEvent();
+    activateDeleteEvent();
+    activateCompleteEvent();
+}
+
+init();

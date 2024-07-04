@@ -15,7 +15,18 @@ button{
     width: 4rem;
     height: 2rem;
     padding: 0.5rem;
+    margin: 0 5px;
     border-radius: 10px;
     border: none;
     color: white;
+    transition: transform 0.3s;
+}
+
+button:hover{
+    cursor: pointer;
+    transform: scale(1.1);
+}
+
+li{
+    padding: 10px 0;
 }
