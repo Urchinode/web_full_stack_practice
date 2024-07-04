@@ -1,0 +1,35 @@
+body{
+    background-color: #353535;
+    color: white;
+}
+
+section{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin: 10px;
+}
+
+header{
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+
+footer{
+    position: absolute;
+    bottom: 0;
+}
+
+#header-container{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    height: 5vh;
+}
+
+.card{
+    background-color: black;
+    border-radius: 25px;
+    margin: 10px;
+}
