@@ -21,11 +21,31 @@ const DOM = {
     }
 }
 
-function addTodo(title){
-    if(!title || title.trim().length === 0){
-        alert('Please input any text.');
-        return;
+// Store in local storage
+function storeTodo(title){
+    const todos = JSON.parse(localStorage.getItem('todos')) || [];
+    todos.push(title);
+    localStorage.setItem('todos', JSON.stringify(todos));
+}
+
+// Remove local storage
+function removeTodo(index){
+    const todos = JSON.parse(localStorage.getItem('todos')) || [];
+    todos.splice(index, 1);
+    localStorage.setItem('todos', JSON.stringify(todos));
+}
+
+// Load todo from local storage
+// Execute when the page is loaded
+function loadTodo(){
+    const todos = JSON.parse(localStorage.getItem('todos')) || [];
+    for (const todo of todos){
+        renderTodo(todo);
     }
+}
+
+// Render new todo card
+function renderTodo(title){
     // Init todo card
     const todoList = document.getElementById(DOM.ID_NAME.TODO_LIST);
     const newTodo = document.createElement(DOM.ELEMENT.LIST);
@@ -57,6 +77,15 @@ function addTodo(title){
     todoList.appendChild(newTodo);
 }
 
+function addTodo(title){
+    if(!title || title.trim().length === 0){
+        alert('Please input any text.');
+        return;
+    }
+    storeTodo(title);
+    renderTodo(title);
+}
+
 // Event handler for Register Button
 function activateRegisterEvent(){
     const registerBtn = document.getElementById(DOM.ID_NAME.TODO_FORM);
@@ -74,6 +103,8 @@ function activateDeleteEvent(){
         // Find Todo Card index
         if(event.target.classList.contains(DOM.CLASS_NAME.DELETE_BTN)){
             const todoListItem = event.target.closest(DOM.ELEMENT.LIST);
+            const index = Array.from(todoList.children).indexOf(todoListItem);
+            removeTodo(index);
             todoListItem.remove();
         }
     }
@@ -96,9 +127,10 @@ function activateCompleteEvent(){
 }
 
 function init(){
+    loadTodo();
     activateRegisterEvent();
     activateDeleteEvent();
     activateCompleteEvent();
 }
 
-init();
+document.addEventListener('DOMContentLoaded', init);
