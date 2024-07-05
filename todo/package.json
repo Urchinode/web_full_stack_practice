@@ -1,0 +1,19 @@
+{
+  "name": "todo",
+  "version": "1.0.0",
+  "description": "Todo list",
+  "main": "app.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Urchinode/front1.git"
+  },
+  "author": "Urchinode",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Urchinode/front1/issues"
+  },
+  "homepage": "https://github.com/Urchinode/front1#readme"
+}
