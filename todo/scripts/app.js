@@ -21,6 +21,9 @@ const DOM = {
     }
 }
 
+// 컨테이너 컴포넌트.
+// load와 렌더를 구분하자.
+
 class TodoItem{
     constructor(title, completed = false){
         this.title = title;
