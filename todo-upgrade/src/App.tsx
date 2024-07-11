@@ -1,14 +1,16 @@
-import "./App.css";
 import Header from "@/components/layout/main/Header";
-import TodoMainLayout from '@/components/layout/main/TodoMainLayout';
-// import GlobalStyle from "./styles/global";
+import TodoMainLayout from "@/components/layout/main/TodoMainLayout";
+import ThemeProvider from "@/providers/ThemeProvider.tsx";
+import GlobalStyle from "./styles/global";
 
-const App: React.FC = () => {
+const App = () => {
   return (
     <>
-      {/* <GlobalStyle /> */}
-      <Header />
-      <TodoMainLayout></TodoMainLayout>
+      <ThemeProvider>
+        <GlobalStyle />
+        <Header />
+        <TodoMainLayout></TodoMainLayout>
+      </ThemeProvider>
     </>
   );
 };
