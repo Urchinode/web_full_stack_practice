@@ -2,6 +2,10 @@ import { useState } from "react";
 import TodoCard from "./card/TodoCard";
 import styled from "styled-components";
 import { Todo } from "@/types/todo";
+import { useSelector } from "react-redux";
+import todoReducer from "@/store/reducer";
+import { RootState } from "@/store";
+import { useDispatch } from "react-redux";
 
 const TodoListContainer = styled.ul`
   padding: 0;
@@ -16,22 +20,10 @@ const TodoListItem = styled.li`
 `
 
 const TodoList = () => {
-  const [todos, setTodos] = useState<Todo[]>([
-    {
-      id: 1,
-      title: "할 일 1",
-      content: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eligendi architecto repellat deserunt ratione. Quam quae quaerat suscipit rerum numquam, vel reprehenderit deleniti esse perferendis quas iste asperiores neque, officiis vero.",
-      isDone: false,
-      createdAt: new Date()
-    },
-    {
-      id: 2,
-      title: "할 일 2",
-      content: "내용 2",
-      isDone: false,
-      createdAt: new Date()
-    },
-  ]);
+  // useSelector로 todoReducer의 state를 가져와서 사용
+  const todos = useSelector((state: RootState) => state.todos);
+  const dispatch = useDispatch();
+  console.log(todos);
   return (
     <>
       <TodoListContainer>
