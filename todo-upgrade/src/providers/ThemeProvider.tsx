@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useState } from "react";
+import { ReactNode, createContext, useEffect, useState } from "react";
 
 export type ThemeMode = "LIGHT" | "DARK";
 
@@ -15,6 +15,11 @@ export const ThemeContext = createContext<ThemeCxt>({
 const ThemeProvider = ({ children }: { children: ReactNode }) => {
   // TODO: Caching in localStorage
   const [theme, setTheme] = useState<ThemeMode>("LIGHT");
+
+  useEffect(() => {
+    const root = document.getElementById("root");
+    if (root) root.className = theme.toLowerCase();
+  })
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme }}>

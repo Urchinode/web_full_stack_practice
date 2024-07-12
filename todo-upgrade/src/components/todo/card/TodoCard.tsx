@@ -127,7 +127,9 @@ const TodoCard = ({ data }: { data: Todo }) => {
                 title="todo complete checkbox"
               />
             </label>
-            <CardCompleteSpan theme={theme}>{data.isDone ? "완료!" : ""}</CardCompleteSpan>
+            <CardCompleteSpan theme={theme}>
+              {data.isDone ? "완료!" : ""}
+            </CardCompleteSpan>
           </CardCheckBoxContent>
           <TodoTitle theme={theme}>{data.title}</TodoTitle>
           <TodoContent theme={theme}>{data.content}</TodoContent>

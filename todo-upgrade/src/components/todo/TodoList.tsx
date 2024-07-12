@@ -6,6 +6,7 @@ import { RootState } from "@/store";
 
 const TodoListContainer = styled.ul`
   padding: 0;
+  margin: 0;
 `;
 
 const TodoListItem = styled.li`
