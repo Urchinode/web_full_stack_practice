@@ -103,7 +103,7 @@ const TodoCard = ({ data }: { data: Todo }) => {
             <DeleteButton theme={theme}>삭제</DeleteButton>
           </CardButtonContent>
           <TodoContent theme={theme}>
-            작성일: {data.createdAt.toLocaleDateString()}
+            작성일: {data.createdAt}
           </TodoContent>
         </CardRightContent>
       </CardContainer>

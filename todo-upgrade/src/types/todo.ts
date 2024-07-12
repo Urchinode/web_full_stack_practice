@@ -3,5 +3,5 @@ export interface Todo{
     title: string;
     content: string;
     isDone: boolean;
-    createdAt: Date;
+    createdAt: string;
   }

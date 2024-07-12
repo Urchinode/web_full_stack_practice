@@ -10,15 +10,7 @@ import { Todo } from "@/types/todo";
 
 type TodoState = Todo[];
 
-export const initialState: TodoState = [
-  {
-    id: "1",
-    title: "할 일 1",
-    content: "1234",
-    isDone: false,
-    createdAt: new Date(),
-  },
-];
+export const initialState: TodoState = [];
 
 export const todoReducer = (
   state: TodoState = initialState,
