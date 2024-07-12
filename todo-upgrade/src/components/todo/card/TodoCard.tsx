@@ -1,7 +1,9 @@
 import { ThemeContext } from "@/providers/ThemeProvider";
+import { completeTodo, deleteTodo } from "@/store/action";
 import THEME from "@/styles/theme";
 import { Todo } from "@/types/todo";
 import { useContext } from "react";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
 
 const CardContainer = styled.div<{ theme: string }>`
@@ -89,18 +91,31 @@ const TodoContent = styled.span<{ theme?: string }>`
 
 const TodoCard = ({ data }: { data: Todo }) => {
   const { theme } = useContext(ThemeContext);
+  const dispatch = useDispatch();
+
+  // const handleEdit = () => {
+  //   dispatch(updateTodo(data.id, {...data}));
+  // }
+
+  const handleDelete = () => {
+    dispatch(deleteTodo(data.id));
+  }
+
+  const handleComplete = () => {
+    dispatch(completeTodo(data.id));
+  }
   return (
     <>
       <CardContainer theme={theme}>
         <CardMainContent>
-          <input readOnly type="checkbox" checked={data.isDone} />
+          <input type="checkbox" checked={data.isDone} />
           <TodoTitle theme={theme}>{data.title}</TodoTitle>
           <TodoContent theme={theme}>{data.content}</TodoContent>
         </CardMainContent>
         <CardRightContent>
           <CardButtonContent>
             <EditButton theme={theme}>수정</EditButton>
-            <DeleteButton theme={theme}>삭제</DeleteButton>
+            <DeleteButton theme={theme} onClick={handleDelete}>삭제</DeleteButton>
           </CardButtonContent>
           <TodoContent theme={theme}>
             작성일: {data.createdAt}
