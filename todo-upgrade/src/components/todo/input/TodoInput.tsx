@@ -21,11 +21,20 @@ const TodoInputName = styled.span<{ theme: string }>`
 const Input = styled.input<{ theme: string }>`
   width: 200px;
   height: 30px;
-  border: none;
+  border: 1px solid transparent;
+  transition: border-bottom-color 0.3s ease-in-out;
+  outline: none;
   background-color: ${({ theme }) =>
     theme === "LIGHT"
       ? THEME.COLOR.LIGHT.BACKGROUND
       : THEME.COLOR.DARK.BACKGROUND};
+  color: ${({ theme }) =>
+    theme === "LIGHT"
+      ? THEME.COLOR.DARK.BACKGROUND
+      : THEME.COLOR.LIGHT.BACKGROUND};
+  &:focus {
+    border-bottom-color: ${({ theme }) => theme === 'LIGHT' ? THEME.COLOR.LIGHT.PRIMARY : THEME.COLOR.DARK.PRIMARY};
+  }
 `;
 
 interface TodoInputProps {
