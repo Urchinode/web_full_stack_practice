@@ -33,7 +33,7 @@ const Input = styled.input<{ theme: string }>`
       ? THEME.COLOR.DARK.BACKGROUND
       : THEME.COLOR.LIGHT.BACKGROUND};
   &:focus {
-    border-bottom-color: ${({ theme }) => theme === 'LIGHT' ? THEME.COLOR.LIGHT.PRIMARY : THEME.COLOR.DARK.PRIMARY};
+    border-bottom-color: ${({ theme }) => theme === 'LIGHT' ? THEME.COLOR.DARK.PRIMARY : THEME.COLOR.LIGHT.PRIMARY};
   }
 `;
 

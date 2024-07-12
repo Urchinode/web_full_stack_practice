@@ -33,6 +33,20 @@ const CardMainContent = styled.div`
   justify-content: center;
 `;
 
+const CardCheckBoxContent = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const CardCompleteSpan = styled.span<{ theme: string }>`
+  color: ${({ theme }) =>
+    theme === "LIGHT"
+      ? THEME.COLOR.DARK.SECONDARY
+      : THEME.COLOR.LIGHT.SECONDARY};
+  margin-left: 5px;
+`;
+
 const CardRightContent = styled.div`
   height: 100%;
   display: flex;
@@ -93,33 +107,39 @@ const TodoCard = ({ data }: { data: Todo }) => {
   const { theme } = useContext(ThemeContext);
   const dispatch = useDispatch();
 
-  // const handleEdit = () => {
-  //   dispatch(updateTodo(data.id, {...data}));
-  // }
-
   const handleDelete = () => {
     dispatch(deleteTodo(data.id));
-  }
+  };
 
   const handleComplete = () => {
     dispatch(completeTodo(data.id));
-  }
+  };
   return (
     <>
       <CardContainer theme={theme}>
         <CardMainContent>
-          <input type="checkbox" checked={data.isDone} />
+          <CardCheckBoxContent>
+            <label>
+              <input
+                type="checkbox"
+                checked={data.isDone}
+                onChange={handleComplete}
+                title="todo complete checkbox"
+              />
+            </label>
+            <CardCompleteSpan theme={theme}>{data.isDone ? "완료!" : ""}</CardCompleteSpan>
+          </CardCheckBoxContent>
           <TodoTitle theme={theme}>{data.title}</TodoTitle>
           <TodoContent theme={theme}>{data.content}</TodoContent>
         </CardMainContent>
         <CardRightContent>
           <CardButtonContent>
             <EditButton theme={theme}>수정</EditButton>
-            <DeleteButton theme={theme} onClick={handleDelete}>삭제</DeleteButton>
+            <DeleteButton theme={theme} onClick={handleDelete}>
+              삭제
+            </DeleteButton>
           </CardButtonContent>
-          <TodoContent theme={theme}>
-            작성일: {data.createdAt}
-          </TodoContent>
+          <TodoContent theme={theme}>작성일: {data.createdAt}</TodoContent>
         </CardRightContent>
       </CardContainer>
     </>

@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { Todo } from "@/types/todo";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
-import { useDispatch } from "react-redux";
 
 const TodoListContainer = styled.ul`
   padding: 0;
