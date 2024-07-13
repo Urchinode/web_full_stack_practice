@@ -2,6 +2,7 @@
   "compilerOptions": {
     "strict": true,
     "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true, // Jest import
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
