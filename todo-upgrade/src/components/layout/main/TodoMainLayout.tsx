@@ -8,9 +8,7 @@ import THEME from "@/styles/theme";
 const MainLayout = styled.main<{ theme: string }>`
   padding: 10px 5%;
   background-color: ${({ theme }) =>
-    theme === "LIGHT"
-      ? THEME.COLOR.LIGHT.BACKGROUND
-      : THEME.COLOR.DARK.BACKGROUND};
+    theme === "LIGHT" ? THEME.COLOR.LIGHT.BACKGROUND : THEME.COLOR.DARK.BACKGROUND};
 `;
 
 const TodoMainLayout = () => {

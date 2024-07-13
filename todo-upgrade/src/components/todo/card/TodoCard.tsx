@@ -1,10 +1,11 @@
 import { ThemeContext } from "@/providers/ThemeProvider";
-import { completeTodo, deleteTodo } from "@/store/action";
+import { completeTodo, deleteTodo, updateTodo } from "@/store/action";
 import THEME from "@/styles/theme";
 import { Todo } from "@/types/todo";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
+import TodoMainContent from "./TodoMainContent";
 
 const CardContainer = styled.div<{ theme: string }>`
   max-width: 80vh;
@@ -14,37 +15,12 @@ const CardContainer = styled.div<{ theme: string }>`
   align-items: center;
   justify-content: space-between;
   background-color: ${({ theme }) =>
-    theme === "LIGHT"
-      ? THEME.COLOR.LIGHT.TODO_CARD
-      : THEME.COLOR.DARK.TODO_CARD};
+    theme === "LIGHT" ? THEME.COLOR.LIGHT.TODO_CARD : THEME.COLOR.DARK.TODO_CARD};
   border-radius: 10px;
   padding: 10px;
   margin-bottom: 10px;
   border: 1px solid
-    ${({ theme }) =>
-      theme === "LIGHT" ? THEME.COLOR.LIGHT.PRIMARY : THEME.COLOR.DARK.PRIMARY};
-`;
-
-const CardMainContent = styled.div`
-  width: 60%;
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  justify-content: center;
-`;
-
-const CardCheckBoxContent = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const CardCompleteSpan = styled.span<{ theme: string }>`
-  color: ${({ theme }) =>
-    theme === "LIGHT"
-      ? THEME.COLOR.DARK.SECONDARY
-      : THEME.COLOR.LIGHT.SECONDARY};
-  margin-left: 5px;
+    ${({ theme }) => (theme === "LIGHT" ? THEME.COLOR.LIGHT.PRIMARY : THEME.COLOR.DARK.PRIMARY)};
 `;
 
 const CardRightContent = styled.div`
@@ -72,16 +48,17 @@ const CardButton = styled.button<{ theme: string }>`
   font-size: 0.8rem;
   cursor: pointer;
   color: ${({ theme }) =>
-    theme === "LIGHT"
-      ? THEME.COLOR.DARK.BACKGROUND
-      : THEME.COLOR.LIGHT.BACKGROUND};
+    theme === "LIGHT" ? THEME.COLOR.DARK.BACKGROUND : THEME.COLOR.LIGHT.BACKGROUND};
 `;
 
 const EditButton = styled(CardButton)`
   background-color: ${({ theme }) =>
-    theme === "LIGHT"
-      ? THEME.COLOR.LIGHT.SECONDARY
-      : THEME.COLOR.DARK.SECONDARY};
+    theme === "LIGHT" ? THEME.COLOR.LIGHT.SECONDARY : THEME.COLOR.DARK.SECONDARY};
+`;
+
+const EditCompleteButton = styled(CardButton)`
+  background-color: ${({ theme }) =>
+    theme === "LIGHT" ? THEME.COLOR.LIGHT.PRIMARY : THEME.COLOR.DARK.PRIMARY};
 `;
 
 const DeleteButton = styled(CardButton)`
@@ -89,23 +66,24 @@ const DeleteButton = styled(CardButton)`
     theme === "LIGHT" ? THEME.COLOR.LIGHT.WARNING : THEME.COLOR.DARK.WARNING};
 `;
 
-const TodoTitle = styled.h3<{ theme?: string }>`
-  color: ${({ theme }) =>
-    theme === "LIGHT"
-      ? THEME.COLOR.DARK.BACKGROUND
-      : THEME.COLOR.LIGHT.BACKGROUND};
-`;
-
 const TodoContent = styled.span<{ theme?: string }>`
   color: ${({ theme }) =>
-    theme === "LIGHT"
-      ? THEME.COLOR.DARK.BACKGROUND
-      : THEME.COLOR.LIGHT.BACKGROUND};
+    theme === "LIGHT" ? THEME.COLOR.DARK.BACKGROUND : THEME.COLOR.LIGHT.BACKGROUND};
 `;
 
 const TodoCard = ({ data }: { data: Todo }) => {
   const { theme } = useContext(ThemeContext);
   const dispatch = useDispatch();
+  const [isEdit, setIsEdit] = useState<boolean>(false);
+
+  const toggleEdit = () => {
+    setIsEdit(!isEdit);
+  };
+
+  const handleEdit = () => {
+    dispatch(updateTodo(data.id, data));
+    setIsEdit(!isEdit);
+  };
 
   const handleDelete = () => {
     dispatch(deleteTodo(data.id));
@@ -117,26 +95,23 @@ const TodoCard = ({ data }: { data: Todo }) => {
   return (
     <>
       <CardContainer theme={theme}>
-        <CardMainContent>
-          <CardCheckBoxContent>
-            <label>
-              <input
-                type="checkbox"
-                checked={data.isDone}
-                onChange={handleComplete}
-                title="todo complete checkbox"
-              />
-            </label>
-            <CardCompleteSpan theme={theme}>
-              {data.isDone ? "완료!" : ""}
-            </CardCompleteSpan>
-          </CardCheckBoxContent>
-          <TodoTitle theme={theme}>{data.title}</TodoTitle>
-          <TodoContent theme={theme}>{data.content}</TodoContent>
-        </CardMainContent>
+        <TodoMainContent
+          theme={theme}
+          data={data}
+          handleComplete={handleComplete}
+          isEdit={isEdit}
+        ></TodoMainContent>
         <CardRightContent>
           <CardButtonContent>
-            <EditButton theme={theme}>수정</EditButton>
+            {isEdit ? (
+              <EditCompleteButton theme={theme} onClick={handleEdit}>
+                완료
+              </EditCompleteButton>
+            ) : (
+              <EditButton theme={theme} onClick={toggleEdit}>
+                수정
+              </EditButton>
+            )}
             <DeleteButton theme={theme} onClick={handleDelete}>
               삭제
             </DeleteButton>

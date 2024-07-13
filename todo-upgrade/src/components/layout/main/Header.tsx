@@ -4,28 +4,28 @@ import { useContext } from "react";
 import { ThemeContext } from "@/providers/ThemeProvider";
 import THEME from "@/styles/theme";
 
-const HeaderContainer = styled.div<{theme: string}>`
+const HeaderContainer = styled.div<{ theme: string }>`
   display: flex;
   flex: 1 1;
   align-items: center;
   justify-content: center;
-  background-color: ${({theme}) => theme === "LIGHT" ? THEME.COLOR.LIGHT.BACKGROUND : THEME.COLOR.DARK.BACKGROUND};
+  background-color: ${({ theme }) =>
+    theme === "LIGHT" ? THEME.COLOR.LIGHT.BACKGROUND : THEME.COLOR.DARK.BACKGROUND};
 `;
 
-const HeaderTitle = styled.h1<{theme: string}>`
+const HeaderTitle = styled.h1<{ theme: string }>`
   margin-left: 5px;
-  color: ${({theme}) => theme === "LIGHT" ? THEME.COLOR.DARK.BACKGROUND : THEME.COLOR.LIGHT.BACKGROUND};
-`
+  color: ${({ theme }) =>
+    theme === "LIGHT" ? THEME.COLOR.DARK.BACKGROUND : THEME.COLOR.LIGHT.BACKGROUND};
+`;
 
 const Header = () => {
-  const {theme} = useContext(ThemeContext);
+  const { theme } = useContext(ThemeContext);
   return (
     <>
       <header>
         <HeaderContainer theme={theme}>
-          <HeaderTitle theme={theme}>
-            Manage your todo
-          </HeaderTitle>
+          <HeaderTitle theme={theme}>Manage your todo</HeaderTitle>
           <ThemeButton></ThemeButton>
         </HeaderContainer>
       </header>

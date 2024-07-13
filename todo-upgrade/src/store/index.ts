@@ -2,7 +2,7 @@ import { combineReducers } from "@reduxjs/toolkit";
 import todoReducer from "./reducer";
 
 const rootReducer = combineReducers({
-    todos: todoReducer
+  todos: todoReducer,
 });
 
 export default rootReducer;

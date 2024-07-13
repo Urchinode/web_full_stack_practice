@@ -16,11 +16,15 @@ const ThemeButtonContainer = styled.button`
 `;
 
 const ThemeButton = () => {
-  const {theme, setTheme} = useContext(ThemeContext);
+  const { theme, setTheme } = useContext(ThemeContext);
   return (
     <>
       <ThemeButtonContainer>
-        {theme === "LIGHT" ? <LightIcon onClick={() => setTheme("DARK")}/> : <NightIcon onClick={() => setTheme("LIGHT")}/>}
+        {theme === "LIGHT" ? (
+          <LightIcon onClick={() => setTheme("DARK")} />
+        ) : (
+          <NightIcon onClick={() => setTheme("LIGHT")} />
+        )}
       </ThemeButtonContainer>
     </>
   );

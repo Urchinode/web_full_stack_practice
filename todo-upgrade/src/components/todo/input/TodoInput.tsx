@@ -12,28 +12,23 @@ const TodoInputBox = styled.div`
 
 const TodoInputName = styled.span<{ theme: string }>`
   color: ${({ theme }) =>
-    theme === "LIGHT"
-      ? THEME.COLOR.DARK.BACKGROUND
-      : THEME.COLOR.LIGHT.BACKGROUND};
+    theme === "LIGHT" ? THEME.COLOR.DARK.BACKGROUND : THEME.COLOR.LIGHT.BACKGROUND};
   margin-right: 5px;
 `;
 
-const Input = styled.input<{ theme: string }>`
+const Input = styled.input<{ theme: string; bgColor?: string }>`
   width: 200px;
-  height: 30px;
+  height: 20px;
   border: 1px solid transparent;
   transition: border-bottom-color 0.3s ease-in-out;
   outline: none;
-  background-color: ${({ theme }) =>
-    theme === "LIGHT"
-      ? THEME.COLOR.LIGHT.BACKGROUND
-      : THEME.COLOR.DARK.BACKGROUND};
+  background-color: ${({ theme, bgColor }) =>
+    bgColor ?? theme === "LIGHT" ? THEME.COLOR.LIGHT.BACKGROUND : THEME.COLOR.DARK.BACKGROUND};
   color: ${({ theme }) =>
-    theme === "LIGHT"
-      ? THEME.COLOR.DARK.BACKGROUND
-      : THEME.COLOR.LIGHT.BACKGROUND};
+    theme === "LIGHT" ? THEME.COLOR.DARK.BACKGROUND : THEME.COLOR.LIGHT.BACKGROUND};
   &:focus {
-    border-bottom-color: ${({ theme }) => theme === 'LIGHT' ? THEME.COLOR.DARK.PRIMARY : THEME.COLOR.LIGHT.PRIMARY};
+    border-bottom-color: ${({ theme }) =>
+      theme === "LIGHT" ? THEME.COLOR.DARK.PRIMARY : THEME.COLOR.LIGHT.PRIMARY};
   }
 `;
 

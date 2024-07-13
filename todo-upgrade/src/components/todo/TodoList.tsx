@@ -10,12 +10,12 @@ const TodoListContainer = styled.ul`
 `;
 
 const TodoListItem = styled.li`
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-`
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
 
 const TodoList = () => {
   // useSelector로 todoReducer의 state를 가져와서 사용

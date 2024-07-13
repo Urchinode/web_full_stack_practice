@@ -19,13 +19,9 @@ const ThemeProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const root = document.getElementById("root");
     if (root) root.className = theme.toLowerCase();
-  })
+  });
 
-  return (
-    <ThemeContext.Provider value={{ theme, setTheme }}>
-      {children}
-    </ThemeContext.Provider>
-  );
+  return <ThemeContext.Provider value={{ theme, setTheme }}>{children}</ThemeContext.Provider>;
 };
 
 export default ThemeProvider;

@@ -34,10 +34,10 @@ export const deleteTodo = (id: string) => {
   };
 };
 
-export const updateTodo = (todo: Todo) => {
+export const updateTodo = (id: string, todo: Todo) => {
   return {
     type: UPDATE_TODO,
-    payload: todo,
+    payload: { id, todo },
   };
 };
 
