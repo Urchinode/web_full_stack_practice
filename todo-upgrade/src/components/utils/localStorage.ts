@@ -11,6 +11,7 @@ export const loadTodo = (): Todo[] => {
   return result;
 };
 
-export const saveTodo = (todos: Todo[]) => {
+export const saveTodo = (todos: Todo[]): Todo[] => {
   window.localStorage.setItem("TODO", JSON.stringify(todos));
+  return todos;
 };
