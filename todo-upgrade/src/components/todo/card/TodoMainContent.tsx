@@ -1,8 +1,9 @@
 import THEME from "@/styles/theme";
 import { Todo } from "@/types/todo";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import styled from "styled-components";
 import TodoInput from "../input/TodoInput";
+import { ThemeContext } from "@/providers/ThemeProvider";
 
 const CardMainContent = styled.div`
   width: 60%;
@@ -67,6 +68,7 @@ const TodoDefaultContent = ({ data, handleComplete, theme }: TodoMainContentChil
 const TodoEditContent = ({ data }: { data: Todo }) => {
   const [title, setTitle] = useState<string>(data.title);
   const [content, setContent] = useState<string>(data.content);
+  const { theme } = useContext(ThemeContext);
 
   const handleTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
@@ -82,12 +84,14 @@ const TodoEditContent = ({ data }: { data: Todo }) => {
         placeholder="제목 입력"
         value={title}
         onChange={handleTitle}
+        $bgColor={theme === "LIGHT" ? THEME.COLOR.LIGHT.TODO_CARD : THEME.COLOR.DARK.TODO_CARD}
       ></TodoInput>
       <TodoInput
         title={"내용"}
         placeholder="내용 입력"
         value={content}
         onChange={handleContent}
+        $bgColor={theme === "LIGHT" ? THEME.COLOR.LIGHT.TODO_CARD : THEME.COLOR.DARK.TODO_CARD}
       ></TodoInput>
     </>
   );

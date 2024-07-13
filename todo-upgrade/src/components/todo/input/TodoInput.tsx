@@ -16,14 +16,14 @@ const TodoInputName = styled.span<{ theme: string }>`
   margin-right: 5px;
 `;
 
-const Input = styled.input<{ theme: string; bgColor?: string }>`
+const Input = styled.input<{ theme: string; $bgColor: string | undefined }>`
   width: 200px;
   height: 20px;
   border: 1px solid transparent;
   transition: border-bottom-color 0.3s ease-in-out;
   outline: none;
-  background-color: ${({ theme, bgColor }) =>
-    bgColor ?? theme === "LIGHT" ? THEME.COLOR.LIGHT.BACKGROUND : THEME.COLOR.DARK.BACKGROUND};
+  background-color: ${({ theme, $bgColor }) =>
+    $bgColor ?? (theme === "LIGHT" ? THEME.COLOR.LIGHT.BACKGROUND : THEME.COLOR.DARK.BACKGROUND)};
   color: ${({ theme }) =>
     theme === "LIGHT" ? THEME.COLOR.DARK.BACKGROUND : THEME.COLOR.LIGHT.BACKGROUND};
   &:focus {
@@ -36,10 +36,11 @@ interface TodoInputProps {
   title: string;
   placeholder: string;
   value: string;
+  $bgColor?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const TodoInput = ({ title, placeholder, value, onChange }: TodoInputProps) => {
+const TodoInput = ({ title, placeholder, value, $bgColor, onChange }: TodoInputProps) => {
   const { theme } = useContext(ThemeContext);
   return (
     <>
@@ -51,6 +52,7 @@ const TodoInput = ({ title, placeholder, value, onChange }: TodoInputProps) => {
           placeholder={placeholder}
           value={value}
           onChange={onChange}
+          $bgColor={$bgColor}
         ></Input>
       </TodoInputBox>
     </>
