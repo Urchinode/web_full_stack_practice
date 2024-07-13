@@ -1,5 +1,5 @@
 import { ThemeContext } from "@/providers/ThemeProvider";
-import { completeTodo, deleteTodo, updateTodo } from "@/store/action";
+import { completeTodo, deleteTodo, updateTodo } from "@/store/todo/action";
 import THEME from "@/styles/theme";
 import { Todo, toTodoMetaData } from "@/types/todo";
 import { useContext, useState } from "react";

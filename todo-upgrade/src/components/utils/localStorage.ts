@@ -1,3 +1,4 @@
+import { ThemeMode } from "@/providers/ThemeProvider";
 import { Todo } from "@/types/todo";
 
 export const loadTodo = (): Todo[] => {
@@ -14,4 +15,14 @@ export const loadTodo = (): Todo[] => {
 export const saveTodo = (todos: Todo[]): Todo[] => {
   window.localStorage.setItem("TODO", JSON.stringify(todos));
   return todos;
+};
+
+export const loadTheme = (): ThemeMode => {
+  const theme: ThemeMode | null = window.localStorage.getItem("THEME") as ThemeMode | null;
+  return theme ?? "LIGHT";
+};
+
+export const saveTheme = (theme: string): string => {
+  window.localStorage.setItem("THEME", theme);
+  return theme;
 };

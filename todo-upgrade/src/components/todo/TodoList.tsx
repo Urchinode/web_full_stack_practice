@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { initTodo } from "@/store/action";
+import { initTodo } from "@/store/todo/action";
 import { loadTodo } from "../utils/localStorage";
 
 const TodoListContainer = styled.ul`

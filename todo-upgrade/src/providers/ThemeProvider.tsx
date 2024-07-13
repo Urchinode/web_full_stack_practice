@@ -1,3 +1,4 @@
+import { loadTheme, saveTheme } from "@/components/utils/localStorage";
 import { ReactNode, createContext, useEffect, useState } from "react";
 
 export type ThemeMode = "LIGHT" | "DARK";
@@ -13,12 +14,12 @@ export const ThemeContext = createContext<ThemeCxt>({
 });
 
 const ThemeProvider = ({ children }: { children: ReactNode }) => {
-  // TODO: Caching in localStorage
-  const [theme, setTheme] = useState<ThemeMode>("LIGHT");
+  const [theme, setTheme] = useState<ThemeMode>(loadTheme());
 
   useEffect(() => {
     const root = document.getElementById("root");
     if (root) root.className = theme.toLowerCase();
+    saveTheme(theme);
   });
 
   return <ThemeContext.Provider value={{ theme, setTheme }}>{children}</ThemeContext.Provider>;

@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import TodoInput from "./TodoInput";
 import TodoRegisterBtn from "./TodoRegisterBtn";
 import { useState } from "react";
-import { addTodo } from "@/store/action";
+import { addTodo } from "@/store/todo/action";
 
 const InputSection = styled.form`
   display: flex;
