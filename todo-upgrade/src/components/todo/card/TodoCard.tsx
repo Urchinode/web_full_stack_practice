@@ -1,7 +1,7 @@
 import { ThemeContext } from "@/providers/ThemeProvider";
 import { completeTodo, deleteTodo, updateTodo } from "@/store/action";
 import THEME from "@/styles/theme";
-import { Todo } from "@/types/todo";
+import { Todo, toTodoMetaData } from "@/types/todo";
 import { useContext, useState } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
@@ -72,16 +72,29 @@ const TodoContent = styled.span<{ theme?: string }>`
 `;
 
 const TodoCard = ({ data }: { data: Todo }) => {
+  const [todoData, setTodoData] = useState(data);
   const { theme } = useContext(ThemeContext);
   const dispatch = useDispatch();
   const [isEdit, setIsEdit] = useState<boolean>(false);
+
+  const changeTitle = (title: string) => {
+    setTodoData({ ...todoData, title });
+  };
+
+  const changeContent = (content: string) => {
+    setTodoData({ ...todoData, content });
+  };
 
   const toggleEdit = () => {
     setIsEdit(!isEdit);
   };
 
   const handleEdit = () => {
-    dispatch(updateTodo(data.id, data));
+    if (todoData.title.trim() === "" || todoData.content.trim() === "") {
+      alert("제목과 내용을 입력해주세요");
+      return;
+    }
+    dispatch(updateTodo(data.id, todoData));
     setIsEdit(!isEdit);
   };
 
@@ -97,7 +110,9 @@ const TodoCard = ({ data }: { data: Todo }) => {
       <CardContainer theme={theme}>
         <TodoMainContent
           theme={theme}
-          data={data}
+          data={toTodoMetaData(data)}
+          changeContent={changeContent}
+          changeTitle={changeTitle}
           handleComplete={handleComplete}
           isEdit={isEdit}
         ></TodoMainContent>

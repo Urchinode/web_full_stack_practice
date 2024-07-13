@@ -1,5 +1,5 @@
 import THEME from "@/styles/theme";
-import { Todo } from "@/types/todo";
+import { TodoMetaData } from "@/types/todo";
 import { useContext, useState } from "react";
 import styled from "styled-components";
 import TodoInput from "../input/TodoInput";
@@ -35,17 +35,28 @@ const TodoContent = styled.span<{ theme?: string }>`
     theme === "LIGHT" ? THEME.COLOR.DARK.BACKGROUND : THEME.COLOR.LIGHT.BACKGROUND};
 `;
 
-interface TodoMainContentChildProps {
+interface TodoEditContentProps {
+  data: TodoMetaData;
+  changeTitle: (title: string) => void;
+  changeContent: (content: string) => void;
+}
+
+interface TodoReadContentProps {
   theme: string;
-  data: Todo;
+  data: TodoMetaData;
   handleComplete: (id: string) => void;
 }
 
-interface TodoMainContentProps extends TodoMainContentChildProps {
+interface TodoMainContentProps {
+  theme: string;
+  data: TodoMetaData;
+  handleComplete: (id: string) => void;
+  changeTitle: (title: string) => void;
+  changeContent: (content: string) => void;
   isEdit: boolean;
 }
 
-const TodoDefaultContent = ({ data, handleComplete, theme }: TodoMainContentChildProps) => {
+const TodoDefaultContent = ({ data, handleComplete, theme }: TodoReadContentProps) => {
   return (
     <CardMainContent>
       <CardCheckBoxContent>
@@ -65,16 +76,18 @@ const TodoDefaultContent = ({ data, handleComplete, theme }: TodoMainContentChil
   );
 };
 
-const TodoEditContent = ({ data }: { data: Todo }) => {
-  const [title, setTitle] = useState<string>(data.title);
-  const [content, setContent] = useState<string>(data.content);
+const TodoEditContent = (prop: TodoEditContentProps) => {
+  const [title, setTitle] = useState<string>(prop.data.title);
+  const [content, setContent] = useState<string>(prop.data.content);
   const { theme } = useContext(ThemeContext);
 
   const handleTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
+    prop.changeTitle(e.target.value);
     setTitle(e.target.value);
   };
 
   const handleContent = (e: React.ChangeEvent<HTMLInputElement>) => {
+    prop.changeContent(e.target.value);
     setContent(e.target.value);
   };
   return (
@@ -97,12 +110,23 @@ const TodoEditContent = ({ data }: { data: Todo }) => {
   );
 };
 
-const TodoMainContent = ({ data, handleComplete, theme, isEdit }: TodoMainContentProps) => {
+const TodoMainContent = ({
+  data,
+  handleComplete,
+  changeContent,
+  changeTitle,
+  theme,
+  isEdit,
+}: TodoMainContentProps) => {
   return (
     <>
       <CardMainContent>
         {isEdit ? (
-          <TodoEditContent data={data}></TodoEditContent>
+          <TodoEditContent
+            data={data}
+            changeContent={changeContent}
+            changeTitle={changeTitle}
+          ></TodoEditContent>
         ) : (
           <TodoDefaultContent data={data} handleComplete={handleComplete} theme={theme} />
         )}
