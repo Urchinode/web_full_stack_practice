@@ -10,18 +10,21 @@ public class ConnectionSingleton {
     private ConnectionSingleton() {
     }
 
-    private static Connection conn;
+    private static volatile Connection conn;
     private static final org.slf4j.Logger logger = Logger.getLogger(ConnectionSingleton.class);
 
     public static Connection getConnection() {
         if (conn != null) return conn;
-
-        try {
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "123456");
-            logger.info("DB CONNECTION COMPLETED");
-        } catch (SQLException e) {
-            logger.error("DB CONNECTION FAIL");
+        synchronized (ConnectionSingleton.class) {
+            if (conn != null) return conn;
+            try {
+                conn = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "123456");
+                logger.info("DB CONNECTION COMPLETED");
+            } catch (SQLException e) {
+                logger.error("DB CONNECTION FAIL");
+            }
         }
+
         return conn;
     }
 }
