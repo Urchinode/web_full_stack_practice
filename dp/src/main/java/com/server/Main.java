@@ -1,7 +1,11 @@
 package com.server;
 
+import com.server.db.ConnectionSingleton;
+
+import java.sql.Connection;
+
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        Connection conn = ConnectionSingleton.getConnection();
     }
 }
