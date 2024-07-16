@@ -20,11 +20,11 @@ public class QueryExecutor {
         else return String.valueOf(origin);
     }
 
-    public ArrayList<?> selectAll(TableEnum tableName, MapperInterface mapper) throws SQLException {
+    public <T> ArrayList<T> selectAll(TableEnum tableName, MapperInterface<T> mapper) throws SQLException {
         String sql = MessageFormat.format("SELECT * FROM {0};", tableName.getTableName());
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(sql);
-        ArrayList<?> entities = mapper.fromResultSet(rs);
+        ArrayList<T> entities = mapper.fromResultSet(rs);
         stmt.close();
         return entities;
     }

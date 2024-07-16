@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserMapper implements MapperInterface{
+public class UserMapper implements MapperInterface<User>{
     public ArrayList<User> fromResultSet(ResultSet rs) throws SQLException {
         ArrayList<User> users = new ArrayList<>();
         if (rs == null) return users;
