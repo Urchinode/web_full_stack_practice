@@ -1,17 +1,19 @@
 package com.server.entity;
 
+import java.sql.ResultSet;
+import java.text.MessageFormat;
 import java.util.List;
 
 public class User {
-    Integer userId;
-    String username;
-    Integer age;
+    private Integer userId;
+    private String username;
+    private Integer age;
 
     static public List<String> getFields() {
         return List.of("user_id", "username", "age");
     }
 
-    public List<Object> getValues(){
+    public List<Object> getValues() {
         return List.of(this.userId, this.username, this.age);
     }
 
@@ -43,5 +45,10 @@ public class User {
 
     public void setAge(Integer age) {
         this.age = age;
+    }
+
+    @Override
+    public String toString() {
+        return MessageFormat.format("USER ID: {0}, NAME: {1}, AGE: {2}", this.userId, this.username, this.age);
     }
 }

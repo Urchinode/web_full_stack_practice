@@ -1,9 +1,9 @@
 package com.server.entity;
 
 public class OrderResult {
-    Integer id;
-    Integer orderId;
-    OrderStatus status;
+    private Integer id;
+    private Integer orderId;
+    private OrderStatus status;
 
     public OrderResult(Integer id, Integer orderId, OrderStatus status) {
         this.id = id;

@@ -1,10 +1,10 @@
 package com.server.entity;
 
 public class Order {
-    Integer id;
-    Integer userId;
-    Integer productId;
-    Integer count;
+    private Integer id;
+    private Integer userId;
+    private Integer productId;
+    private Integer count;
 
     public Order(Integer id, Integer userId, Integer productId, Integer count) {
         this.id = id;
