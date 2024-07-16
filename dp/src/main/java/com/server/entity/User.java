@@ -1,9 +1,19 @@
 package com.server.entity;
 
+import java.util.List;
+
 public class User {
     Integer userId;
     String username;
     Integer age;
+
+    static public List<String> getFields() {
+        return List.of("user_id", "username", "age");
+    }
+
+    public List<Object> getValues(){
+        return List.of(this.userId, this.username, this.age);
+    }
 
     public User(Integer userId, String username, Integer age) {
         this.userId = userId;
