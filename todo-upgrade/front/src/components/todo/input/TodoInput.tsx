@@ -22,8 +22,7 @@ const Input = styled.input<{ theme: string; $bgColor: string | undefined }>`
   border: 1px solid transparent;
   transition: border-bottom-color 0.3s ease-in-out;
   outline: none;
-  background-color: ${({ theme, $bgColor }) =>
-    $bgColor ?? (theme === "LIGHT" ? THEME.COLOR.LIGHT.BACKGROUND : THEME.COLOR.DARK.BACKGROUND)};
+  background-color: transparent;
   color: ${({ theme }) =>
     theme === "LIGHT" ? THEME.COLOR.DARK.BACKGROUND : THEME.COLOR.LIGHT.BACKGROUND};
   &:focus {

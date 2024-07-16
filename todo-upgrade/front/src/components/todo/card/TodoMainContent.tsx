@@ -1,6 +1,6 @@
 import THEME from "@/styles/theme";
 import { TodoMetaData } from "@/types/todo";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import styled from "styled-components";
 import TodoInput from "../input/TodoInput";
 import { ThemeContext } from "@/providers/ThemeProvider";
@@ -77,32 +77,28 @@ const TodoDefaultContent = ({ data, handleComplete, theme }: TodoReadContentProp
 };
 
 const TodoEditContent = (prop: TodoEditContentProps) => {
-  const [title, setTitle] = useState<string>(prop.data.title);
-  const [content, setContent] = useState<string>(prop.data.content);
   const { theme } = useContext(ThemeContext);
 
   const handleTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
-    prop.changeTitle(e.target.value);
-    setTitle(e.target.value);
+    prop.changeTitle(e.target.value); // TodoCard prop
   };
 
   const handleContent = (e: React.ChangeEvent<HTMLInputElement>) => {
     prop.changeContent(e.target.value);
-    setContent(e.target.value);
   };
   return (
     <>
       <TodoInput
         title={"제목"}
         placeholder="제목 입력"
-        value={title}
+        value={prop.data.title}
         onChange={handleTitle}
         $bgColor={theme === "LIGHT" ? THEME.COLOR.LIGHT.TODO_CARD : THEME.COLOR.DARK.TODO_CARD}
       ></TodoInput>
       <TodoInput
         title={"내용"}
         placeholder="내용 입력"
-        value={content}
+        value={prop.data.content}
         onChange={handleContent}
         $bgColor={theme === "LIGHT" ? THEME.COLOR.LIGHT.TODO_CARD : THEME.COLOR.DARK.TODO_CARD}
       ></TodoInput>

@@ -110,7 +110,7 @@ const TodoCard = ({ data }: { data: Todo }) => {
       <CardContainer theme={theme}>
         <TodoMainContent
           theme={theme}
-          data={toTodoMetaData(data)}
+          data={toTodoMetaData(todoData)}
           changeContent={changeContent}
           changeTitle={changeTitle}
           handleComplete={handleComplete}
