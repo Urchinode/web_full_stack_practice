@@ -18,3 +18,25 @@ spring:
   data:
     jdbc:
       dialect: mysql
+  security:
+    oauth2:
+      client:
+        provider:
+          kakao:
+            authorization-uri: ${KAKAO_AUTH_URI} # 로그인 버튼 클릭시 이동할 URI
+            token-uri: ${KAKAO_TOKEN_URI} # 클라이언트가 토큰을 요청할 인증 서버 URI
+            user-info-uri: ${KAKAO_INFO_URI} # 리소스 서버 URL
+            user-info-authentication-method: header # header, form, query. header는 헤더에 토큰을 넣어 전송.
+            user-name-attribute: id
+        registration:
+          kakao:
+            client-id: ${KAKAO_CLIENT_ID}
+            client-secret: ${KAKAO_CLIENT_SECRET}
+            client-authentication-method: client_secret_post # 토큰 요청 방법. c_s_p는 client_id와 client_secret을 이용해 요청한다.
+            redirect-uri: ${KAKAO_REDIRECT_URI}
+            authorization-grant-type: authorization_code
+            client-name: Kakao
+            scope:
+              - profile_nickname
+              - account_email
+              - gender
