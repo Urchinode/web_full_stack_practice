@@ -18,7 +18,6 @@ public class KakaoOAuth2LoginSuccessHandler implements AuthenticationSuccessHand
                                         Authentication authentication)
             throws IOException, ServletException {
         String redirectUrl = UriComponentsBuilder.fromUriString("/kakao-login")
-                .queryParam("at", "at")
                 .build()
                 .toUriString();
 
