@@ -41,3 +41,5 @@ spring:
               - profile_nickname
               - account_email
               - gender
+jwt:
+  secret-key: ${JWT_KEY}
