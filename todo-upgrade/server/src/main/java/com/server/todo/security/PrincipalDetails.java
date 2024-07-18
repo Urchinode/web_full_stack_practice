@@ -28,6 +28,7 @@ public record PrincipalDetails (
 
     @Override
     public Map<String, Object> getAttributes() {
+        System.out.println("PRINCIPAL ATTRIBUTES: " + attrs);
         return attrs;
     }
 

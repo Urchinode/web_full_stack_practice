@@ -44,8 +44,14 @@ public class SecurityConfig {
                 )
                 .sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(request ->
-                        request.requestMatchers("/", "/auth/success", "/oauth2/callback/kakao").permitAll()
+                        request.requestMatchers("/", "/kakao-login", "/oauth2/callback/kakao").permitAll()
                                 .anyRequest().authenticated())
+                // 인증 요청을 하면 내부 객체가 동작
+                // 인증 완료시 콜백 URL로 인증 코드를 전달
+                // 이후 OAuth..Filter가 인증 코드를 처리하여 토큰을 교환한다.
+                // OAuthProvider가 토큰을 이용해 사용자 정보를 가져온다. 이때, OAuthUserService가 호출된다.
+                // Service를 이용해 OAuth2User를 생성한다.
+                // 성패에 따른 핸들러가 동작한다.
                 .oauth2Login(oauth ->
                         oauth.userInfoEndpoint(c -> c.userService(kakaoOAuth2UserService))
                                 .successHandler(kakaoOAuth2LoginSuccessHandler));

@@ -30,13 +30,13 @@ public class KakaoOAuth2UserService extends DefaultOAuth2UserService {
                 .getProviderDetails()
                 .getUserInfoEndpoint()
                 .getUserNameAttributeName();
-
+        System.out.println("REGISTRATION ID: " + registrationId);
         String userNameAttrName = userRequest
                 .getClientRegistration()
                 .getProviderDetails()
                 .getUserInfoEndpoint()
                 .getUserNameAttributeName();
-
+        System.out.println("USERNAME ATTRIBUTE NAME: " + userNameAttrName);
         try {
             OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfo.of(registrationId, oAuthAttrs);
             user = findOrSave(oAuth2UserInfo);
