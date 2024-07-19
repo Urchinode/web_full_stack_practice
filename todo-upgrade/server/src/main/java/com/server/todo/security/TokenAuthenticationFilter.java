@@ -1,5 +1,6 @@
 package com.server.todo.security;
 
+import com.server.todo.dto.OAuth2UserInfo;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,7 +24,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String accessToken = resolveToken(request);
-        System.out.println("AUTH FILTER ACTIVATED: " + accessToken);
+        System.out.println("ACCESS TOKEN: " + accessToken);
         try {
             if(oAuthTokenProvider.validateToken(accessToken)) setAuthentication(accessToken);
             else{
@@ -47,9 +48,9 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private String resolveToken(HttpServletRequest request){
-        printAllHeaders(request);
+//        printAllHeaders(request);
         String token = request.getHeader("Authorization");
-        if ((ObjectUtils.isEmpty(token)) || !token.startsWith("Bearer")) return null;
+        if ((ObjectUtils.isEmpty(token)) || !token.startsWith("Bearer ")) return null;
         return token.substring(7);
     }
 

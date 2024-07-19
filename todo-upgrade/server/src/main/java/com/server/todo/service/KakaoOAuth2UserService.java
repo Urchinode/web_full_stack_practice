@@ -39,6 +39,7 @@ public class KakaoOAuth2UserService extends DefaultOAuth2UserService {
         System.out.println("USERNAME ATTRIBUTE NAME: " + userNameAttrName);
         try {
             OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfo.of(registrationId, oAuthAttrs);
+            System.out.println("USER INFO: " + oAuth2UserInfo);
             user = findOrSave(oAuth2UserInfo);
         } catch (AuthException e) {
             throw new RuntimeException(e);
