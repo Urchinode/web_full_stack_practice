@@ -1,5 +1,6 @@
 package com.server.todo.security;
 
+import ch.qos.logback.core.util.StringUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -13,6 +14,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.token.Token;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -41,12 +43,13 @@ public class OAuthTokenProvider {
     }
 
     public String generateAccessToken(Authentication authentication){
+        System.out.println("TOKEN FROM : " + authentication);
         return generateToken(authentication, ACCESS_TOKEN_EXPIRE_TIME);
     }
 
-    public String generateRefreshToken(Authentication authentication){
-        return generateToken(authentication, REFRESH_TOKEN_EXPIRE_TIME);
-        // tokenService.registerToken(authentication.getName(), refreshToken, accessToken); // Redis
+    public void generateRefreshToken(Authentication authentication, String accessToken) {
+        String refreshToken = generateToken(authentication, REFRESH_TOKEN_EXPIRE_TIME);
+//        tokenService.saveOrUpdate(authentication.getName(), refreshToken, accessToken);
     }
 
     public String generateToken(Authentication authentication, Long expiredTime){
@@ -74,6 +77,7 @@ public class OAuthTokenProvider {
         List<SimpleGrantedAuthority> authorities = getAuthorities(claims);
 
         User principal = new User(claims.getSubject(), "", authorities);
+        System.out.println("USER PASSWORD AUTH TOKEN: " + principal);
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
 
