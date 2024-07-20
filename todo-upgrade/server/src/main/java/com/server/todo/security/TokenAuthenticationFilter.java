@@ -21,6 +21,8 @@ import java.util.Enumeration;
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
     private final OAuthTokenProvider oAuthTokenProvider;
 
+    // OAuth 로그인 요청시 동작.
+    // 헤더의 토큰을 유효성 검사 + 재발급
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String accessToken = resolveToken(request);

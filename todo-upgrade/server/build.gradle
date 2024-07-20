@@ -39,6 +39,10 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
+
+	// Logger
+	implementation 'org.slf4j:slf4j-api:2.0.13'
+	implementation 'ch.qos.logback:logback-classic:1.5.6' // 로그 구현체가 있어야 slf4j 사용 가능
 }
 
 tasks.named('test') {

@@ -21,22 +21,23 @@ spring:
       dialect: mysql
   security:
     oauth2:
+      # 아래 정보 대신 ClientRegistration을 활용할 수 있다.
       client:
-        provider:
+        provider: # OAuth2 서비스 정보
           kakao:
-            authorization-uri: ${KAKAO_AUTH_URI} # 로그인 버튼 클릭시 이동할 URI
+            authorization-uri: ${KAKAO_AUTH_URI} # 로그인 창 URI
             token-uri: ${KAKAO_TOKEN_URI} # 클라이언트가 토큰을 요청할 인증 서버 URI
             user-info-uri: ${KAKAO_INFO_URI} # 리소스 서버 URL
             user-info-authentication-method: header # header, form, query. header는 헤더에 토큰을 넣어 전송.
-            user-name-attribute: id
-        registration:
+            user-name-attribute: id # 응답 데이터 변수(key 값)
+        registration: # 내 서비스 정보
           kakao:
             client-id: ${KAKAO_CLIENT_ID}
             client-secret: ${KAKAO_CLIENT_SECRET}
             client-authentication-method: client_secret_post # 토큰 요청 방법. c_s_p는 client_id와 client_secret을 이용해 요청한다.
-            redirect-uri: ${KAKAO_REDIRECT_URI}
+            redirect-uri: ${KAKAO_REDIRECT_URI} # 로그인 성공 후 리다이렉트할 URI, 즉, 인증 코드를 받을 URI.
             authorization-grant-type: authorization_code
-            client-name: urchinode
+            client-name: urchinode # 서비스 이름
             scope:
               - profile_nickname
               - account_email
