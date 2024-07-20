@@ -4,6 +4,7 @@ import com.server.todo.entity.UserEntity;
 import com.server.todo.entity.UserRole;
 import jakarta.security.auth.message.AuthException;
 import lombok.Builder;
+import org.slf4j.Logger;
 import org.springframework.security.crypto.keygen.KeyGenerators;
 
 import java.text.MessageFormat;
@@ -15,6 +16,7 @@ public record OAuth2UserInfo(
         String email,
         String gender
 ) {
+    private static Logger logger = com.server.todo.utils.Logger.getLogger(OAuth2UserInfo.class);
     @Override
     public String toString() {
         return MessageFormat.format("NICKNAME: {0}, EMAIL: {1}, GENDER: {2}", nickname, email, gender);
@@ -29,7 +31,7 @@ public record OAuth2UserInfo(
 
     private static OAuth2UserInfo ofKakao(Map<String, Object> attrs) {
         Map<String, Object> account = (Map<String, Object>) attrs.get("kakao_account");
-        System.out.println(account);
+        logger.info("ACCOUNT: {}", account);
         String nickname = (String) ((Map<String, Object>) account.get("profile")).get("nickname");
         String email = (String) account.get("email");
         String gender = (String) account.get("gender");

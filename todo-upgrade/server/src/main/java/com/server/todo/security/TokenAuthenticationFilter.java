@@ -6,6 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -20,13 +21,14 @@ import java.util.Enumeration;
 @Component
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
     private final OAuthTokenProvider oAuthTokenProvider;
+    private Logger logger = com.server.todo.utils.Logger.getLogger(this.getClass());
 
     // OAuth 로그인 요청시 동작.
     // 헤더의 토큰을 유효성 검사 + 재발급
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String accessToken = resolveToken(request);
-        System.out.println("ACCESS TOKEN: " + accessToken);
+        logger.info("ACCESS TOKEN: {}", accessToken);
         try {
             if(oAuthTokenProvider.validateToken(accessToken)) setAuthentication(accessToken);
             else{
@@ -45,7 +47,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
     private void setAuthentication(String accessToken) throws Exception {
         Authentication authentication = oAuthTokenProvider.getAuthentication(accessToken);
-        System.out.println("THE AUTHENTICATION IS: " + authentication.getName());
+        logger.info("THE AUTHENTICATION IS: {}", authentication.getName());
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
@@ -63,7 +65,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             Enumeration<String> headers = request.getHeaders(headerName);
             while (headers.hasMoreElements()) {
                 String headerValue = headers.nextElement();
-                System.out.println(headerName + ": " + headerValue);
+                logger.info("{}: {}", headerName, headerValue);
             }
         }
     }

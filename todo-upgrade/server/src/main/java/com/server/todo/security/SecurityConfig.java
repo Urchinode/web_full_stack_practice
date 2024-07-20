@@ -21,7 +21,7 @@ public class SecurityConfig {
     private final TokenExceptionFilter tokenExceptionFilter;
     private final TokenAuthenticationFilter tokenAuthenticationFilter;
     private final CustomOAuth2UserService customOAuth2UserService;
-    private final KakaoOAuth2LoginSuccessHandler kakaoOAuth2LoginSuccessHandler;
+    private final CustomLoginSuccessHandler customLoginSuccessHandler;
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer(){
@@ -41,7 +41,7 @@ public class SecurityConfig {
                 )
                 .sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(request ->
-                        request.requestMatchers("/", "/kakao-login", "/oauth2/callback/kakao").permitAll()
+                        request.requestMatchers("/").permitAll()
                                 .anyRequest().authenticated())
                 // 인증 요청을 하면 내부 객체가 동작
                 // 인증 완료시 콜백 URL로 인증 코드를 전달
@@ -51,7 +51,7 @@ public class SecurityConfig {
                 // 성패에 따른 핸들러가 동작한다.
                 .oauth2Login(oauth ->
                         oauth.userInfoEndpoint(c -> c.userService(customOAuth2UserService))
-                                .successHandler(kakaoOAuth2LoginSuccessHandler))
+                                .successHandler(customLoginSuccessHandler))
                 .addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(tokenExceptionFilter, TokenAuthenticationFilter.class);
         return http.build();

@@ -1,6 +1,7 @@
 package com.server.todo.security;
 
 import com.server.todo.entity.UserEntity;
+import org.slf4j.Logger;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +17,8 @@ public record PrincipalDetails (
         String attrKey
 ) implements OAuth2User, UserDetails {
 
+    private static Logger logger = com.server.todo.utils.Logger.getLogger(PrincipalDetails.class);
+
     @Override
     public String getPassword() {
         return "";
@@ -28,7 +31,7 @@ public record PrincipalDetails (
 
     @Override
     public Map<String, Object> getAttributes() {
-        System.out.println("PRINCIPAL ATTRIBUTES: " + attrs);
+        logger.info("PRINCIPAL ATTRIBUTES: " + attrs);
         return attrs;
     }
 

@@ -9,6 +9,7 @@ import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecurityException;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -29,6 +30,9 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 public class OAuthTokenProvider {
+
+    private final Logger logger = com.server.todo.utils.Logger.getLogger(this.getClass());
+
     @Value("${jwt.secret-key}")
     private String key;
     private SecretKey secretKey;
@@ -43,7 +47,7 @@ public class OAuthTokenProvider {
     }
 
     public String generateAccessToken(Authentication authentication){
-        System.out.println("TOKEN FROM : " + authentication);
+        logger.info("TOKEN FROM : {}", authentication);
         return generateToken(authentication, ACCESS_TOKEN_EXPIRE_TIME);
     }
 
@@ -61,7 +65,7 @@ public class OAuthTokenProvider {
                 .stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining());
-
+        logger.info("AUTH BEFORE TOKEN: " + authorities);
         return Jwts
                 .builder()
                 .subject(authentication.getName())
@@ -77,7 +81,7 @@ public class OAuthTokenProvider {
         List<SimpleGrantedAuthority> authorities = getAuthorities(claims);
 
         User principal = new User(claims.getSubject(), "", authorities);
-        System.out.println("USER PASSWORD AUTH TOKEN: " + principal);
+        logger.info("USER PASSWORD AUTH TOKEN: {}", principal);
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
 
