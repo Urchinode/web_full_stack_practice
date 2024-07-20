@@ -1,6 +1,6 @@
 package com.server.todo.security;
 
-import com.server.todo.service.KakaoOAuth2UserService;
+import com.server.todo.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +20,7 @@ public class SecurityConfig {
 
     private final TokenExceptionFilter tokenExceptionFilter;
     private final TokenAuthenticationFilter tokenAuthenticationFilter;
-    private final KakaoOAuth2UserService kakaoOAuth2UserService;
+    private final CustomOAuth2UserService customOAuth2UserService;
     private final KakaoOAuth2LoginSuccessHandler kakaoOAuth2LoginSuccessHandler;
 
     @Bean
@@ -50,7 +50,7 @@ public class SecurityConfig {
                 // Service를 이용해 OAuth2User를 생성한다.
                 // 성패에 따른 핸들러가 동작한다.
                 .oauth2Login(oauth ->
-                        oauth.userInfoEndpoint(c -> c.userService(kakaoOAuth2UserService))
+                        oauth.userInfoEndpoint(c -> c.userService(customOAuth2UserService))
                                 .successHandler(kakaoOAuth2LoginSuccessHandler))
                 .addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(tokenExceptionFilter, TokenAuthenticationFilter.class);

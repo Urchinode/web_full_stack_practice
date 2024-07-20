@@ -4,6 +4,7 @@ import com.server.todo.dto.OAuth2UserInfo;
 import com.server.todo.entity.UserEntity;
 import com.server.todo.repository.UserRepository;
 import com.server.todo.security.PrincipalDetails;
+import com.server.todo.utils.Logger;
 import jakarta.security.auth.message.AuthException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -17,29 +18,32 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class KakaoOAuth2UserService extends DefaultOAuth2UserService {
+public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private final UserRepository userRepository;
+    private org.slf4j.Logger logger = Logger.getLogger(this.getClass());
 
     @Transactional
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        Map<String, Object> oAuthAttrs = super.loadUser(userRequest).getAttributes();
+        OAuth2User oAuth2User = super.loadUser(userRequest);
+        logger.info("OAUTH USER: " + oAuth2User);
+        Map<String, Object> oAuthAttrs = oAuth2User.getAttributes();
         UserEntity user;
         String registrationId = userRequest
                 .getClientRegistration()
                 .getProviderDetails()
                 .getUserInfoEndpoint()
                 .getUserNameAttributeName();
-        System.out.println("REGISTRATION ID: " + registrationId);
+        logger.info("REGISTRATION ID: " + registrationId);
         String userNameAttrName = userRequest
                 .getClientRegistration()
                 .getProviderDetails()
                 .getUserInfoEndpoint()
                 .getUserNameAttributeName();
-        System.out.println("USERNAME ATTRIBUTE NAME: " + userNameAttrName);
+        logger.info("USERNAME ATTRIBUTE NAME: " + userNameAttrName);
         try {
             OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfo.of(registrationId, oAuthAttrs);
-            System.out.println("USER INFO: " + oAuth2UserInfo);
+            logger.info("USER INFO: " + oAuth2UserInfo);
             user = findOrSave(oAuth2UserInfo);
         } catch (AuthException e) {
             throw new RuntimeException(e);
