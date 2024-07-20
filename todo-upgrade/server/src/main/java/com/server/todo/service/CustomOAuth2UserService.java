@@ -31,9 +31,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         UserEntity user;
         String registrationId = userRequest
                 .getClientRegistration()
-                .getProviderDetails()
-                .getUserInfoEndpoint()
-                .getUserNameAttributeName();
+                .getRegistrationId();
         logger.info("REGISTRATION ID: " + registrationId);
         String userNameAttrName = userRequest
                 .getClientRegistration()

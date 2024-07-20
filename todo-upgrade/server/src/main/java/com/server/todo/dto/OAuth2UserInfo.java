@@ -22,7 +22,7 @@ public record OAuth2UserInfo(
 
     public static OAuth2UserInfo of(String registrationId, Map<String, Object> attrs) throws AuthException {
         return switch (registrationId) {
-            case "id" -> ofKakao(attrs);
+            case "kakao" -> ofKakao(attrs);
             default -> throw new AuthException("FAIL");
         };
     }
