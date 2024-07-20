@@ -20,13 +20,9 @@ const GlobalStyle = createGlobalStyle`
         background-color: ${THEME.COLOR.DARK.BACKGROUND};
     }
     html{
-        height: 100%;
-        width: 100%;
         font-family: 'goorm-sans';
     }
     body{
-        height: 100%;
-        width: 100%;
         margin: 0;
     }
     #root {

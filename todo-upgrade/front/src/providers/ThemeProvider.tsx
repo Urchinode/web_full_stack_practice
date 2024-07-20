@@ -17,7 +17,7 @@ const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [theme, setTheme] = useState<ThemeMode>(loadTheme());
 
   useEffect(() => {
-    const root = document.getElementById("root");
+    const root = document.getElementsByTagName("html")[0];
     if (root) root.className = theme.toLowerCase();
     saveTheme(theme);
   });
