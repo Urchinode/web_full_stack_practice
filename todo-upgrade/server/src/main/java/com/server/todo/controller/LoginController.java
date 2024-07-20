@@ -15,17 +15,4 @@ import java.util.Optional;
 @RestController
 @RequiredArgsConstructor
 public class LoginController {
-    private final UserRepository userRepository;
-
-    @GetMapping("/kakao-login")
-    public Optional<UserEntity> getInfo(@AuthenticationPrincipal UserDetails userDetails) throws Exception {
-//        return code;
-        return userRepository.findByUserKey(userDetails.getUsername());
-    }
-
-    // 카카오 로그인 경로
-    @GetMapping("/oauth2/authorization/kakao")
-    public void loginToKakao() {
-
-    }
 }

@@ -1,6 +1,7 @@
 package com.server.todo.security;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
+import java.text.MessageFormat;
 
 @RequiredArgsConstructor
 @Component
@@ -28,11 +30,15 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
         oAuthTokenProvider.generateRefreshToken(authentication, token);
         logger.info("TOKEN CREATED: {}", token);
         response.setHeader("Authorization", "Bearer " + token);
-        String redirectUrl = UriComponentsBuilder.fromUriString("/kakao-login")
-//                .queryParam("token", token)
-                .build()
-                .toUriString();
+        response.addCookie(createCookie("authToken", token));
+        response.sendRedirect("http://localhost:5173/todo");
+    }
 
-        response.sendRedirect(redirectUrl);
+    private Cookie createCookie(String key, String value) {
+        Cookie cookie = new Cookie(key, value);
+        cookie.setMaxAge(60 * 60 * 60);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        return cookie;
     }
 }
