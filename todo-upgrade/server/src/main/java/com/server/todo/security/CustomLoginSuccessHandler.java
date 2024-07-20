@@ -4,6 +4,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -13,7 +14,8 @@ import java.io.IOException;
 
 @RequiredArgsConstructor
 @Component
-public class KakaoOAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
+public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
+    private Logger logger = com.server.todo.utils.Logger.getLogger(this.getClass());
     private final OAuthTokenProvider oAuthTokenProvider;
 
     @Override
@@ -21,13 +23,13 @@ public class KakaoOAuth2LoginSuccessHandler implements AuthenticationSuccessHand
                                         HttpServletResponse response,
                                         Authentication authentication)
             throws IOException, ServletException {
-        System.out.println("AUTH TYPE: " + authentication.getClass());
+        logger.info("AUTH TYPE: {}", authentication.getClass());
         String token = oAuthTokenProvider.generateAccessToken(authentication);
         oAuthTokenProvider.generateRefreshToken(authentication, token);
-        System.out.println("TOKEN CREATED: " + token);
+        logger.info("TOKEN CREATED: {}", token);
         response.setHeader("Authorization", "Bearer " + token);
         String redirectUrl = UriComponentsBuilder.fromUriString("/kakao-login")
-                .queryParam("token", token)
+//                .queryParam("token", token)
                 .build()
                 .toUriString();
 

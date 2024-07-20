@@ -32,7 +32,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         String registrationId = userRequest
                 .getClientRegistration()
                 .getRegistrationId();
-        logger.info("REGISTRATION ID: " + registrationId);
+        logger.info("REGISTRATION ID: " + registrationId); // OAuth2 Provider name
         String userNameAttrName = userRequest
                 .getClientRegistration()
                 .getProviderDetails()
