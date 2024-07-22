@@ -19,7 +19,7 @@ const LoginButton = styled.button`
 
 const LoginPage = () => {
   const onClick = () => {
-    window.location.href = "http://localhost:8080/oauth/authorization/kakao";
+    window.location.href = "http://localhost:8080/oauth2/authorization/kakao";
   };
   return (
     <>

@@ -3,6 +3,7 @@ package com.server.todo.security;
 import com.server.todo.dto.OAuth2UserInfo;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String accessToken = resolveToken(request);
-        logger.info("ACCESS TOKEN: {}", accessToken);
+        logger.info("ACCESS TOKEN: {} FROM {}", accessToken, request.getRequestURI());
         try {
             if(oAuthTokenProvider.validateToken(accessToken)) setAuthentication(accessToken);
             else{
@@ -53,6 +54,12 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
     private String resolveToken(HttpServletRequest request){
 //        printAllHeaders(request);
+        Cookie[] cookies = request.getCookies();
+        if (cookies == null) return null;
+        for (Cookie cookie: cookies){
+            logger.info("COOKIE IN REQUEST: {} : {}", cookie.getName(), cookie.getValue());
+            if(cookie.getName().equals("authToken")) return cookie.getValue();
+        }
         String token = request.getHeader("Authorization");
         if ((ObjectUtils.isEmpty(token)) || !token.startsWith("Bearer ")) return null;
         return token.substring(7);
