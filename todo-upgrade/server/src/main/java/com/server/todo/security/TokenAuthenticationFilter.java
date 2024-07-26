@@ -16,13 +16,14 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.nio.file.AccessDeniedException;
 import java.util.Enumeration;
 
 @RequiredArgsConstructor
 @Component
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
     private final OAuthTokenProvider oAuthTokenProvider;
-    private Logger logger = com.server.todo.utils.Logger.getLogger(this.getClass());
+    private final Logger logger = com.server.todo.utils.Logger.getLogger(this.getClass());
 
     // OAuth 로그인 요청시 동작.
     // 헤더의 토큰을 유효성 검사 + 재발급
@@ -30,6 +31,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String accessToken = resolveToken(request);
         logger.info("ACCESS TOKEN: {} FROM {}", accessToken, request.getRequestURI());
+
         try {
             if(oAuthTokenProvider.validateToken(accessToken)) setAuthentication(accessToken);
             else{
@@ -58,7 +60,8 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         if (cookies == null) return null;
         for (Cookie cookie: cookies){
             logger.info("COOKIE IN REQUEST: {} : {}", cookie.getName(), cookie.getValue());
-            if(cookie.getName().equals("authToken")) return cookie.getValue();
+            String AUTH_TOKEN_COOKIE_KEY = "authToken";
+            if(cookie.getName().equals(AUTH_TOKEN_COOKIE_KEY)) return cookie.getValue();
         }
         String token = request.getHeader("Authorization");
         if ((ObjectUtils.isEmpty(token)) || !token.startsWith("Bearer ")) return null;
