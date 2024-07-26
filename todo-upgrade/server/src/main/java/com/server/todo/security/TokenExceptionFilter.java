@@ -21,7 +21,7 @@ public class TokenExceptionFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         } catch (IOException e) {
             logger.error("TOKEN ERROR OCCURRED: {}", e.getMessage());
-            response.sendError(403, e.getMessage());
+            response.sendError(401, e.getMessage());
         }
     }
 }
