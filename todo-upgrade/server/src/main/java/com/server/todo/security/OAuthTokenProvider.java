@@ -7,6 +7,7 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecurityException;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
@@ -82,9 +83,10 @@ public class OAuthTokenProvider {
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
 
-    // TODO
-    public String reIssueAccessToken(String accessToken){
-        return null;
+    public String reIssueAccessToken(String refreshToken) throws Exception {
+        // 리프레시 토큰 검증
+        if (!validateToken(refreshToken)) return null;
+        return generateAccessToken(getAuthentication(refreshToken));
     }
 
     public boolean validateToken(String token) throws Exception {
@@ -115,5 +117,12 @@ public class OAuthTokenProvider {
         } catch (SecurityException e){
             throw new Exception("INVALID JWT SIGNATURE");
         }
+    }
+
+    public Cookie createCookie(String key, String token) {
+        Cookie cookie = new Cookie(key, token);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        return cookie;
     }
 }
