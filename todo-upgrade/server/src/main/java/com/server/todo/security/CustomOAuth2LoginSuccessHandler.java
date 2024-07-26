@@ -9,15 +9,13 @@ import org.slf4j.Logger;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
-import java.text.MessageFormat;
 
 @RequiredArgsConstructor
 @Component
-public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
-    private Logger logger = com.server.todo.utils.Logger.getLogger(this.getClass());
+public class CustomOAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
+    private final Logger logger = com.server.todo.utils.Logger.getLogger(this.getClass());
     private final OAuthTokenProvider oAuthTokenProvider;
 
     @Override
@@ -25,18 +23,19 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
                                         HttpServletResponse response,
                                         Authentication authentication)
             throws IOException, ServletException {
+        String SUCCESS_REDIRECT_URL = "http://localhost:5173/todo";
         logger.info("AUTH TYPE: {}", authentication.getClass());
         String token = oAuthTokenProvider.generateAccessToken(authentication);
         oAuthTokenProvider.generateRefreshToken(authentication, token);
         logger.info("TOKEN CREATED: {}", token);
         response.setHeader("Authorization", "Bearer " + token);
         response.addCookie(createCookie("authToken", token));
-        response.sendRedirect("http://localhost:5173/todo");
+        response.sendRedirect(SUCCESS_REDIRECT_URL);
     }
 
     private Cookie createCookie(String key, String value) {
         Cookie cookie = new Cookie(key, value);
-        cookie.setMaxAge(60 * 60 * 60);
+        cookie.setMaxAge(10);
         cookie.setPath("/");
         cookie.setHttpOnly(true);
         return cookie;
