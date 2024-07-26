@@ -14,7 +14,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Component
 public class CustomOAuth2LoginFailHandler implements AuthenticationFailureHandler {
-    private Logger logger = com.server.todo.utils.Logger.getLogger(this.getClass());
+    private final Logger logger = com.server.todo.utils.Logger.getLogger(this.getClass());
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
         logger.info("AUTH ERROR: {}", exception.getMessage());

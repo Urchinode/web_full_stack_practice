@@ -34,8 +34,8 @@ public class OAuthTokenProvider {
     @Value("${jwt.secret-key}")
     private String key;
     private SecretKey secretKey;
-    private static final Long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30L;
-    private static final Long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 24 * 10L;
+    private static final Long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 1L;
+    private static final Long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 1L;
     private static final String KEY_ROLE = "role";
     //private final TokenService tokenService;
 
@@ -74,7 +74,7 @@ public class OAuthTokenProvider {
                 .compact();
     }
 
-    public Authentication getAuthentication(String token) throws Exception {
+    public Authentication getAuthentication(String token){
         Claims claims = parseClaims(token);
         List<SimpleGrantedAuthority> authorities = getAuthorities(claims);
 
@@ -83,16 +83,16 @@ public class OAuthTokenProvider {
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
 
-    public String reIssueAccessToken(String refreshToken) throws Exception {
+    public String reIssueAccessToken(String refreshToken){
         // 리프레시 토큰 검증
         if (!validateToken(refreshToken)) return null;
         return generateAccessToken(getAuthentication(refreshToken));
     }
 
-    public boolean validateToken(String token) throws Exception {
+    public boolean validateToken(String token){
         if(!StringUtils.hasText(token)) return false;
         Claims claims = parseClaims(token);
-        return claims.getExpiration().after(new Date());
+        return claims != null && claims.getExpiration().after(new Date());
     }
 
     private List<SimpleGrantedAuthority> getAuthorities(Claims claims){
@@ -102,7 +102,7 @@ public class OAuthTokenProvider {
                 ));
     }
 
-    private Claims parseClaims(String token) throws Exception{
+    private Claims parseClaims(String token){
         try {
             return Jwts
                     .parser()
@@ -113,9 +113,11 @@ public class OAuthTokenProvider {
         } catch (ExpiredJwtException e){
             return e.getClaims();
         } catch (MalformedJwtException e){
-            throw new Exception("INVALID TOKEN");
+            logger.error("INVALID TOKEN");
+            return null;
         } catch (SecurityException e){
-            throw new Exception("INVALID JWT SIGNATURE");
+            logger.error("INVALID JWT SIGNATURE");
+            return null;
         }
     }
 

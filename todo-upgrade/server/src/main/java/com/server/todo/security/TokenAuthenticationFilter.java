@@ -42,35 +42,34 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             throw new AccessDeniedException("NO ACCESS TOKEN.");
         }
 
-        try {
-            if(oAuthTokenProvider.validateToken(accessToken)) setAuthentication(accessToken);
-            else{
-                String refreshToken = resolveToken(request, TokenKey.REFRESH_TOKEN);
-                String reissueAccessToken = oAuthTokenProvider.reIssueAccessToken(refreshToken);
-                logger.info("REFRESH TOKEN: {} ,REISSUED TOKEN: {}", refreshToken, reissueAccessToken);
-                if(StringUtils.hasText(reissueAccessToken)){
-                    response.addCookie(oAuthTokenProvider.createCookie(TokenKey.ACCESS_TOKEN.getName(), reissueAccessToken));
-                    setAuthentication(reissueAccessToken);
-                }
+        if (oAuthTokenProvider.validateToken(accessToken)) setAuthentication(accessToken);
+        else {
+            String refreshToken = resolveToken(request, TokenKey.REFRESH_TOKEN);
+            String reissueAccessToken = oAuthTokenProvider.reIssueAccessToken(refreshToken);
+            logger.info("REFRESH TOKEN: {} ,REISSUED TOKEN: {}", refreshToken, reissueAccessToken);
+            if (StringUtils.hasText(reissueAccessToken)) {
+                response.addCookie(oAuthTokenProvider.createCookie(TokenKey.ACCESS_TOKEN.getName(), reissueAccessToken));
+                setAuthentication(reissueAccessToken);
+            } else {
+                throw new AccessDeniedException("TOKEN EXPIRED.");
             }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
+
         filterChain.doFilter(request, response);
     }
 
-    private void setAuthentication(String accessToken) throws Exception {
+    private void setAuthentication(String accessToken) {
         Authentication authentication = oAuthTokenProvider.getAuthentication(accessToken);
         logger.info("THE AUTHENTICATION IS: {}", authentication.getName());
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
-    private String resolveToken(HttpServletRequest request, TokenKey tokenKey){
+    private String resolveToken(HttpServletRequest request, TokenKey tokenKey) {
 //        printAllHeaders(request);
         Cookie[] cookies = request.getCookies();
         if (cookies == null) return null;
-        for (Cookie cookie: cookies){
-            if(cookie.getName().equals(tokenKey.getName())) return cookie.getValue();
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals(tokenKey.getName())) return cookie.getValue();
         }
         return null;
     }
