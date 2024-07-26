@@ -35,8 +35,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     // 헤더의 토큰을 유효성 검사 + 재발급
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String accessToken = resolveToken(request);
-        logger.info("ACCESS TOKEN: {} FROM {}", accessToken, request.getRequestURI());
+        String accessToken = resolveToken(request, TokenKey.ACCESS_TOKEN);
 
         // ACCESS TOKEN 쿠키 부재시 에러
         if (accessToken == null) {
@@ -46,11 +45,12 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         try {
             if(oAuthTokenProvider.validateToken(accessToken)) setAuthentication(accessToken);
             else{
-                String reissueAccessToken = oAuthTokenProvider.reIssueAccessToken(accessToken);
-
+                String refreshToken = resolveToken(request, TokenKey.REFRESH_TOKEN);
+                String reissueAccessToken = oAuthTokenProvider.reIssueAccessToken(refreshToken);
+                logger.info("REFRESH TOKEN: {} ,REISSUED TOKEN: {}", refreshToken, reissueAccessToken);
                 if(StringUtils.hasText(reissueAccessToken)){
+                    response.addCookie(oAuthTokenProvider.createCookie(TokenKey.ACCESS_TOKEN.getName(), reissueAccessToken));
                     setAuthentication(reissueAccessToken);
-                    response.setHeader("Authorization", "Bearer " + reissueAccessToken);
                 }
             }
         } catch (Exception e) {
@@ -65,17 +65,14 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
-    private String resolveToken(HttpServletRequest request){
+    private String resolveToken(HttpServletRequest request, TokenKey tokenKey){
 //        printAllHeaders(request);
         Cookie[] cookies = request.getCookies();
         if (cookies == null) return null;
         for (Cookie cookie: cookies){
-            logger.info("COOKIE IN REQUEST: {} : {}", cookie.getName(), cookie.getValue());
-            if(cookie.getName().equals(TokenKey.ACCESS_TOKEN.getName())) return cookie.getValue();
+            if(cookie.getName().equals(tokenKey.getName())) return cookie.getValue();
         }
-        String token = request.getHeader("Authorization");
-        if ((ObjectUtils.isEmpty(token)) || !token.startsWith("Bearer ")) return null;
-        return token.substring(7);
+        return null;
     }
 
     private void printAllHeaders(HttpServletRequest request) {
