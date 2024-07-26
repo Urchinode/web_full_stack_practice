@@ -30,6 +30,8 @@ public class SecurityConfig {
     private final CustomOAuth2LoginSuccessHandler customLoginSuccessHandler;
     private final CustomOAuth2LoginFailHandler customLoginFailHandler;
 
+    // web.ignoring은 인증 자체를 수행하지 않는다.
+    // 특정 필터만 인증을 무시하고 싶은 경우, 필터 체인에서 permitAll을 사용하자.
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring()
@@ -57,7 +59,7 @@ public class SecurityConfig {
                 // Service를 이용해 OAuth2User를 생성한다.
                 // 성패에 따른 핸들러가 동작한다.
                 .oauth2Login(oauth ->
-                        oauth.userInfoEndpoint(c -> c.userService(customOAuth2UserService))
+                        oauth.userInfoEndpoint(c -> c.userService(customOAuth2UserService)) // 리소스 발급 관련 설정
                                 .successHandler(customLoginSuccessHandler)
                                 .failureHandler(customLoginFailHandler))
                 .addFilterBefore(tokenAuthenticationFilter, OAuth2LoginAuthenticationFilter.class)

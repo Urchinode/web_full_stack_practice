@@ -18,6 +18,5 @@ public class CustomOAuth2LoginFailHandler implements AuthenticationFailureHandle
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
         logger.info("AUTH ERROR: {}", exception.getMessage());
-//        throw exception;
     }
 }
