@@ -20,29 +20,29 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private final UserRepository userRepository;
-    private org.slf4j.Logger logger = Logger.getLogger(this.getClass());
+    private final org.slf4j.Logger logger = Logger.getLogger(this.getClass());
 
     @Transactional
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
-        logger.info("USER REQUEST: {}, {}, {}", userRequest.getClientRegistration(), userRequest.getAccessToken(), userRequest.getAdditionalParameters());
-        logger.info("OAUTH USER: " + oAuth2User);
+        logger.info("USER REQUEST: {}, {}, {}", userRequest.getClientRegistration(), userRequest.getAccessToken().getExpiresAt(), userRequest.getAdditionalParameters());
+        logger.info("OAUTH USER: {}", oAuth2User);
         Map<String, Object> oAuthAttrs = oAuth2User.getAttributes();
         UserEntity user;
         String registrationId = userRequest
                 .getClientRegistration()
                 .getRegistrationId();
-        logger.info("REGISTRATION ID: " + registrationId); // OAuth2 Provider name
+        logger.info("REGISTRATION ID: {}", registrationId); // OAuth2 Provider name
         String userNameAttrName = userRequest
                 .getClientRegistration()
                 .getProviderDetails()
                 .getUserInfoEndpoint()
                 .getUserNameAttributeName();
-        logger.info("USERNAME ATTRIBUTE NAME: " + userNameAttrName);
+        logger.info("USERNAME ATTRIBUTE NAME: {}", userNameAttrName);
         try {
             OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfo.of(registrationId, oAuthAttrs);
-            logger.info("USER INFO: " + oAuth2UserInfo);
+            logger.info("USER INFO: {}", oAuth2UserInfo);
             user = findOrSave(oAuth2UserInfo);
         } catch (AuthException e) {
             throw new RuntimeException(e);

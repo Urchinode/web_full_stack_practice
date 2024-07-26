@@ -26,16 +26,16 @@ public class CustomOAuth2LoginSuccessHandler implements AuthenticationSuccessHan
         String SUCCESS_REDIRECT_URL = "http://localhost:5173/todo";
         logger.info("AUTH TYPE: {}", authentication.getClass());
         String token = oAuthTokenProvider.generateAccessToken(authentication);
-        oAuthTokenProvider.generateRefreshToken(authentication, token);
+        String refreshToken = oAuthTokenProvider.generateRefreshToken(authentication, token);
         logger.info("TOKEN CREATED: {}", token);
         response.setHeader("Authorization", "Bearer " + token);
-        response.addCookie(createCookie("authToken", token));
+        response.addCookie(createCookie(TokenKey.ACCESS_TOKEN.getName(), token));
+        response.addCookie(createCookie(TokenKey.REFRESH_TOKEN.getName(), token));
         response.sendRedirect(SUCCESS_REDIRECT_URL);
     }
 
     private Cookie createCookie(String key, String value) {
         Cookie cookie = new Cookie(key, value);
-        cookie.setMaxAge(10);
         cookie.setPath("/");
         cookie.setHttpOnly(true);
         return cookie;

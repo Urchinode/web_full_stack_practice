@@ -71,8 +71,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         if (cookies == null) return null;
         for (Cookie cookie: cookies){
             logger.info("COOKIE IN REQUEST: {} : {}", cookie.getName(), cookie.getValue());
-            String AUTH_TOKEN_COOKIE_KEY = "authToken";
-            if(cookie.getName().equals(AUTH_TOKEN_COOKIE_KEY)) return cookie.getValue();
+            if(cookie.getName().equals(TokenKey.ACCESS_TOKEN.getName())) return cookie.getValue();
         }
         String token = request.getHeader("Authorization");
         if ((ObjectUtils.isEmpty(token)) || !token.startsWith("Bearer ")) return null;
