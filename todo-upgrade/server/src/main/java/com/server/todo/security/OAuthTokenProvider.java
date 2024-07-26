@@ -34,17 +34,17 @@ public class OAuthTokenProvider {
     @Value("${jwt.secret-key}")
     private String key;
     private SecretKey secretKey;
-    private static final Long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 1L;
-    private static final Long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 1L;
+    private static final Long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30L;
+    private static final Long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24L;
     private static final String KEY_ROLE = "role";
     //private final TokenService tokenService;
 
     @PostConstruct
-    private void setUpSecretKey(){
+    private void setUpSecretKey() {
         secretKey = Keys.hmacShaKeyFor(key.getBytes());
     }
 
-    public String generateAccessToken(Authentication authentication){
+    public String generateAccessToken(Authentication authentication) {
         logger.info("TOKEN FROM : {}", authentication);
         return generateToken(authentication, ACCESS_TOKEN_EXPIRE_TIME);
     }
@@ -54,7 +54,7 @@ public class OAuthTokenProvider {
 //        tokenService.saveOrUpdate(authentication.getName(), refreshToken, accessToken);
     }
 
-    public String generateToken(Authentication authentication, Long expiredTime){
+    public String generateToken(Authentication authentication, Long expiredTime) {
         Date now = new Date();
         Date expiredDate = new Date(now.getTime() + expiredTime);
 
@@ -74,7 +74,7 @@ public class OAuthTokenProvider {
                 .compact();
     }
 
-    public Authentication getAuthentication(String token){
+    public Authentication getAuthentication(String token) {
         Claims claims = parseClaims(token);
         List<SimpleGrantedAuthority> authorities = getAuthorities(claims);
 
@@ -83,26 +83,26 @@ public class OAuthTokenProvider {
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
 
-    public String reIssueAccessToken(String refreshToken){
+    public String reIssueAccessToken(String refreshToken) {
         // 리프레시 토큰 검증
         if (!validateToken(refreshToken)) return null;
         return generateAccessToken(getAuthentication(refreshToken));
     }
 
-    public boolean validateToken(String token){
-        if(!StringUtils.hasText(token)) return false;
+    public boolean validateToken(String token) {
+        if (!StringUtils.hasText(token)) return false;
         Claims claims = parseClaims(token);
         return claims != null && claims.getExpiration().after(new Date());
     }
 
-    private List<SimpleGrantedAuthority> getAuthorities(Claims claims){
+    private List<SimpleGrantedAuthority> getAuthorities(Claims claims) {
         return Collections
                 .singletonList(new SimpleGrantedAuthority(
                         claims.get(KEY_ROLE).toString()
                 ));
     }
 
-    private Claims parseClaims(String token){
+    private Claims parseClaims(String token) {
         try {
             return Jwts
                     .parser()
@@ -110,12 +110,12 @@ public class OAuthTokenProvider {
                     .build()
                     .parseSignedClaims(token)
                     .getPayload();
-        } catch (ExpiredJwtException e){
+        } catch (ExpiredJwtException e) {
             return e.getClaims();
-        } catch (MalformedJwtException e){
+        } catch (MalformedJwtException e) {
             logger.error("INVALID TOKEN");
             return null;
-        } catch (SecurityException e){
+        } catch (SecurityException e) {
             logger.error("INVALID JWT SIGNATURE");
             return null;
         }
