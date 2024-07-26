@@ -13,7 +13,6 @@ import org.springframework.security.config.annotation.web.configurers.HeadersCon
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -28,12 +27,13 @@ public class SecurityConfig {
     private final TokenExceptionFilter tokenExceptionFilter;
     private final TokenAuthenticationFilter tokenAuthenticationFilter;
     private final CustomOAuth2UserService customOAuth2UserService;
-    private final CustomLoginSuccessHandler customLoginSuccessHandler;
+    private final CustomOAuth2LoginSuccessHandler customLoginSuccessHandler;
+    private final CustomOAuth2LoginFailHandler customLoginFailHandler;
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring()
-                .requestMatchers("/error", "/favicon.ico");
+                .requestMatchers("/error");
     }
 
     @Bean
@@ -48,7 +48,7 @@ public class SecurityConfig {
                 )
                 .sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(request ->
-                        request.requestMatchers("/").permitAll()
+                        request.requestMatchers("/", "/login/**").permitAll() // OAuth2 요청 허용
                                 .anyRequest().authenticated())
                 // 인증 요청을 하면 내부 객체가 동작
                 // 인증 완료시 콜백 URL로 인증 코드를 전달
@@ -58,7 +58,8 @@ public class SecurityConfig {
                 // 성패에 따른 핸들러가 동작한다.
                 .oauth2Login(oauth ->
                         oauth.userInfoEndpoint(c -> c.userService(customOAuth2UserService))
-                                .successHandler(customLoginSuccessHandler))
+                                .successHandler(customLoginSuccessHandler)
+                                .failureHandler(customLoginFailHandler))
                 .addFilterBefore(tokenAuthenticationFilter, OAuth2LoginAuthenticationFilter.class)
                 .addFilterBefore(tokenExceptionFilter, TokenAuthenticationFilter.class);
         return http.build();
@@ -69,11 +70,11 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
 
+
         config.setAllowCredentials(true);
-        config.addAllowedOriginPattern("http://localhost:*");
+        config.setAllowedOrigins(List.of("http://localhost:5173"));
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
-        config.addExposedHeader("Authorization");
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
 
