@@ -21,7 +21,7 @@ import java.util.Map;
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private final UserRepository userRepository;
     private final org.slf4j.Logger logger = Logger.getLogger(this.getClass());
-
+    
     @Transactional
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {

@@ -3,21 +3,21 @@ package com.server.todo.security;
 import com.server.todo.entity.UserEntity;
 import org.slf4j.Logger;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.oauth2.core.user.OAuth2UserAuthority;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-public record PrincipalDetails (
+public record PrincipalDetails(
         UserEntity user,
         Map<String, Object> attrs,
         String attrKey
 ) implements OAuth2User, UserDetails {
 
-    private static Logger logger = com.server.todo.utils.Logger.getLogger(PrincipalDetails.class);
+    private final static Logger logger = com.server.todo.utils.Logger.getLogger(PrincipalDetails.class);
 
     @Override
     public String getPassword() {
@@ -37,7 +37,7 @@ public record PrincipalDetails (
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(user.getRole().getKey()));
+        return List.of(new OAuth2UserAuthority(user.getRole().getKey(), attrs));
     }
 
     @Override
