@@ -8,6 +8,7 @@ import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecurityException;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
@@ -119,6 +120,15 @@ public class OAuthTokenProvider {
             logger.error("INVALID JWT SIGNATURE");
             return null;
         }
+    }
+
+    public String resolveToken(HttpServletRequest request, TokenKey tokenKey) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies == null) return null;
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals(tokenKey.getName())) return cookie.getValue();
+        }
+        return null;
     }
 
     public Cookie createCookie(String key, String token) {

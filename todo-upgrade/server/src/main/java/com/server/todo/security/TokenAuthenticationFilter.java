@@ -1,9 +1,7 @@
 package com.server.todo.security;
 
-import com.server.todo.dto.OAuth2UserInfo;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +9,6 @@ import org.slf4j.Logger;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -35,7 +32,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     // 헤더의 토큰을 유효성 검사 + 재발급
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String accessToken = resolveToken(request, TokenKey.ACCESS_TOKEN);
+        String accessToken = oAuthTokenProvider.resolveToken(request, TokenKey.ACCESS_TOKEN);
 
         // ACCESS TOKEN 쿠키 부재시 에러
         if (accessToken == null) {
@@ -44,7 +41,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
         if (oAuthTokenProvider.validateToken(accessToken)) setAuthentication(accessToken);
         else {
-            String refreshToken = resolveToken(request, TokenKey.REFRESH_TOKEN);
+            String refreshToken = oAuthTokenProvider.resolveToken(request, TokenKey.REFRESH_TOKEN);
             String reissueAccessToken = oAuthTokenProvider.reIssueAccessToken(refreshToken);
             logger.info("REFRESH TOKEN: {} ,REISSUED TOKEN: {}", refreshToken, reissueAccessToken);
             if (StringUtils.hasText(reissueAccessToken)) {
@@ -62,16 +59,6 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         Authentication authentication = oAuthTokenProvider.getAuthentication(accessToken);
         logger.info("THE AUTHENTICATION IS: {}", authentication.getName());
         SecurityContextHolder.getContext().setAuthentication(authentication);
-    }
-
-    private String resolveToken(HttpServletRequest request, TokenKey tokenKey) {
-//        printAllHeaders(request);
-        Cookie[] cookies = request.getCookies();
-        if (cookies == null) return null;
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals(tokenKey.getName())) return cookie.getValue();
-        }
-        return null;
     }
 
     private void printAllHeaders(HttpServletRequest request) {
