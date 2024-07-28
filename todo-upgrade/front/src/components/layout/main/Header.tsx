@@ -21,11 +21,26 @@ const HeaderTitle = styled.h1<{ theme: string }>`
 
 const Header = () => {
   const { theme } = useContext(ThemeContext);
+
+  const onLogout = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/auth/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+      if (response.ok) {
+        window.location.href = "/";
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
   return (
     <>
       <header>
         <HeaderContainer theme={theme}>
           <HeaderTitle theme={theme}>Manage your todo</HeaderTitle>
+          <button onClick={onLogout}>로그아웃</button>
           <ThemeButton></ThemeButton>
         </HeaderContainer>
       </header>
