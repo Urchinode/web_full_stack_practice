@@ -3502,6 +3502,11 @@ react-dom@^18.3.1:
     loose-envify "^1.1.0"
     scheduler "^0.23.2"
 
+react-hotjar@^6.3.1:
+  version "6.3.1"
+  resolved "https://registry.yarnpkg.com/react-hotjar/-/react-hotjar-6.3.1.tgz#cce120c0fc5160056937fd646fc11a8b925b7294"
+  integrity sha512-EwMqL+ROSlKzatMhT/aqRq7XWWfzlnHynSBSTJh5M2O78mBiPohiSl4Ysls3HOQkkD9y6L22BW0c9bxK2JguwQ==
+
 react-is@^16.7.0:
   version "16.13.1"
   resolved "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz"
