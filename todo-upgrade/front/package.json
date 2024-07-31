@@ -36,6 +36,7 @@
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "prettier": "3.3.2",
+    "react-hotjar": "^6.3.1",
     "ts-jest": "^29.2.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.2.2",
