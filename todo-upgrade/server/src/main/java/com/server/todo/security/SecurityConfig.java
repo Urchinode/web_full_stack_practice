@@ -50,7 +50,7 @@ public class SecurityConfig {
                 )
                 .sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(request ->
-                        request.requestMatchers("/", "/login/**", "/auth/**").permitAll() // OAuth2 요청 허용
+                        request.requestMatchers("/", "/login/**", "/auth/**", "/swagger-ui/**", "/swagger-resources/**", "/api-docs/**").permitAll() // OAuth2 요청 허용
                                 .anyRequest().authenticated())
                 // 인증 요청을 하면 내부 객체가 동작
                 // 인증 완료시 콜백 URL로 인증 코드를 전달

@@ -14,7 +14,9 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
+import java.text.MessageFormat;
 import java.util.Enumeration;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Component
@@ -25,7 +27,11 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     // 로그인 수행시 skip
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        return StringUtils.startsWithIgnoreCase(request.getRequestURI(), "/login");
+        List<String> freeUrls = List.of("/login", "/swagger-ui", "/swagger-resources", "/api-docs");
+        for(String url: freeUrls){
+            if(StringUtils.startsWithIgnoreCase(request.getRequestURI(), url)) return true;
+        }
+        return false;
     }
 
     // OAuth 로그인 요청시 동작.
@@ -36,7 +42,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
         // ACCESS TOKEN 쿠키 부재시 에러
         if (accessToken == null) {
-            throw new AccessDeniedException("NO ACCESS TOKEN.");
+            throw new AccessDeniedException(MessageFormat.format("NO ACCESS TOKEN {0}", request.getRequestURI()));
         }
 
         if (oAuthTokenProvider.validateToken(accessToken)) setAuthentication(accessToken);
