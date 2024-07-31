@@ -12,6 +12,11 @@ springdoc:
     path: /api-docs
   swagger-ui:
     operations-sorter: method
+    display-request-duration: true
+    oauth:
+      client-id: ${KAKAO_CLIENT_ID}
+      client-secret: ${KAKAO_CLIENT_SECRET}
+  default-consumes-media-type: application/json
 
 spring:
   datasource:
@@ -50,3 +55,9 @@ spring:
               - gender
 jwt:
   secret-key: ${JWT_KEY}
+
+KAKAO_CLIENT_ID: ${KAKAO_CLIENT_ID}
+KAKAO_CLIENT_SECRET: ${KAKAO_CLIENT_SECRET}
+KAKAO_AUTH_REQ_URL: ${KAKAO_AUTH_REQ_URL}
+KAKAO_TOKEN_URI: ${KAKAO_TOKEN_URI}
+FRONT_URL: ${FRONT_URL}
