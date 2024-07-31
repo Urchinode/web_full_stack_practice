@@ -1,6 +1,7 @@
 package com.server.todo.controller;
 
 import com.server.todo.security.TokenKey;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Arrays;
 
+@Tag(name = "Auth", description = "인증 관련")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
