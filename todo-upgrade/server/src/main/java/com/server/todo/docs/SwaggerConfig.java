@@ -19,8 +19,8 @@ public class SwaggerConfig {
     @Value("${KAKAO_TOKEN_URI}")
     private String KAKAO_TOKEN_URI;
 
-    @Value(("${FRONT_URL}"))
-    private String FRONT_URL;
+    @Value(("${TERMS_OF_SERVICE_URL}"))
+    private String TERMS_OF_SERVICE_URL;
 
     @Bean
     public OpenAPI openAPI() {
@@ -34,7 +34,7 @@ public class SwaggerConfig {
                 .title("Todo List API")
                 .description("Test TODO")
                 .version("v1.0.0")
-                .termsOfService(FRONT_URL);
+                .termsOfService(TERMS_OF_SERVICE_URL);
     }
 
     private Components components() {

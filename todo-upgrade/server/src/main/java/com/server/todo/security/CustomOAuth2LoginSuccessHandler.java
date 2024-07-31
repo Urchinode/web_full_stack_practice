@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -17,12 +18,14 @@ public class CustomOAuth2LoginSuccessHandler implements AuthenticationSuccessHan
     private final Logger logger = com.server.todo.utils.Logger.getLogger(this.getClass());
     private final OAuthTokenProvider oAuthTokenProvider;
 
+    @Value("${SUCCESS_REDIRECT_URL}")
+    private String SUCCESS_REDIRECT_URL;
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response,
                                         Authentication authentication)
             throws IOException, ServletException {
-        String SUCCESS_REDIRECT_URL = "http://localhost:5173/todo";
         logger.info("AUTH TYPE: {}", authentication.getClass());
         String token = oAuthTokenProvider.generateAccessToken(authentication);
         String refreshToken = oAuthTokenProvider.generateRefreshToken(authentication, token);

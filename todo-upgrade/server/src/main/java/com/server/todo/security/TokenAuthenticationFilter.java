@@ -39,7 +39,6 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String accessToken = oAuthTokenProvider.resolveToken(request, TokenKey.ACCESS_TOKEN);
-
         // ACCESS TOKEN 쿠키 부재시 에러
         if (accessToken == null) {
             throw new AccessDeniedException(MessageFormat.format("NO ACCESS TOKEN {0}", request.getRequestURI()));
